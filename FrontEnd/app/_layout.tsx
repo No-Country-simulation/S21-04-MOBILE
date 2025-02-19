@@ -13,8 +13,8 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient({
@@ -44,15 +44,15 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="auth/login/index.tsx" />
-          </Stack>
+          {/*     <SafeAreaView style={{ flex: 1 }}> */}
+          <Stack screenOptions={{ headerShown: false }}></Stack>
           <StatusBar style="auto" />
+          {/*     </SafeAreaView> */}
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
