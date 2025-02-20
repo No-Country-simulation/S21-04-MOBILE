@@ -21,26 +21,27 @@ exports.login = (req, res) => {
         return res.status(401).send('Invalid credentials');
     }
 
-    const token = jwt.sign({ id: user.id}, process.env.SECRET_KEY, {
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
         expiresIn: 3600 // 1 hora
     });
 
     res.status(200).send({ auth: true, token });
 };
 
-exports.verifyToken = (req, res, next) => {
-    const token = req.headers['x-access-token'];
+exports.verifyToken = (req, res) => {
+    const authHeader = req.headers['authorization'];
 
-    if (!token) {
-        return res.status(401).send('No token provided');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ message: 'No token provided' });
     }
 
-    jwt.verify(token, 'secret-key', (err, decoded) => {
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
         if (err) {
-            return res.status(500).send('Failed to authenticate token');
+            return res.status(403).json({ message: 'Failed to authenticate token' });
         }
 
-        req.userId = decoded.id;
-        next();
+        res.status(200).json({ message: 'Token is valid', userId: decoded.id });
     });
 };
