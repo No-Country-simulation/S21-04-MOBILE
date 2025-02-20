@@ -1,6 +1,8 @@
 const express = require('express'); // Corrige el typo
 const corsMiddleware = require('./middlewares/corsMiddleware');
 const dotenv = require('dotenv');
+const morganMiddleware = require('./middlewares/morganMiddleware');
+const logger = require('./utils/logger');
 
 // Configura las variables de entorno
 dotenv.config();
@@ -11,6 +13,15 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(corsMiddleware);
+app.use(morganMiddleware);
+
+
+// Middleware de error
+app.use((err, req, res, next) => {
+    logger.error(err);
+    res.status(500).send('Something went wrong');
+});
+
 
 // Importa las rutas
 const authRoutes = require('./routes/authRoutes');
