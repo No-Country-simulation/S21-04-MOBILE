@@ -1,12 +1,20 @@
 const express = require('express'); // Corrige el typo
 const corsMiddleware = require('./middlewares/corsMiddleware');
 const dotenv = require('dotenv');
+const database = require("./config/db");
+const path = require('path');
 
 // Configura las variables de entorno
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 // Inicializa express
 const app = express();
+
+database.connect((err) => {
+    if (err) throw err;
+
+    console.log("Connect to database " + process.env.DATABASE_NAME);
+});
 
 // Middleware
 app.use(express.json());
