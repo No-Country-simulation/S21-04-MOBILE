@@ -22,6 +22,7 @@ app.use(corsMiddleware);
 
 // Importa las rutas
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 // Base route
 app.get('/', (req, res) => {
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', profileRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
