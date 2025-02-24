@@ -2,72 +2,117 @@ const database = require("../config/db");
 const ProfileDTO = require("../models/Profile");
 
 class ProfileService {
-    async getProfile(id) {
-        return new Promise((resolve, reject) => {
-            database.query("SELECT * FROM profile WHERE id = ?", [id], (error, results) => {
-                if (error) return reject(error);
-                if (results.length === 0) return reject(new Error("Perfil no encontrado"));
+    async getProfile(userId) {
+        const [result] = await database.query("SELECT * FROM profile WHERE user_id = ?", [userId]);
 
-                const dbProfile = results[0];
-                const profile = new ProfileDTO(dbProfile.id, dbProfile.user_id, dbProfile.name, dbProfile.last_name, dbProfile.bio, dbProfile.photo_url, dbProfile.gender, dbProfile.created_at);
-                resolve(profile);
-            });
-        });
+        if (result.length === 0) {
+            const error = new Error("Perfil no encontrado");
+            error.statusCode = 404
+            throw error
+        }
+
+        const { id, user_id, name, last_name, bio, photo_url, gender, created_at } = result[0];
+
+        return new ProfileDTO(id, user_id, name, last_name, bio, photo_url, gender, created_at);
     }
 
     async createProfile(userId, name, lastName, bio, photoURL, gender, createdAt) {
-        return new Promise((resolve, reject) => {
-            database.query("SELECT id FROM user WHERE id = ?", [userId], (err, results) => {
-                if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("El usuario no existe"));
+        try {
+            const [userResult] = await database.query("SELECT id FROM user WHERE id = ?", [userId]);
 
-                const query = `
-                    INSERT INTO profile (user_id, name, last_name, bio, photo_url, gender, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                `;
-                const created_at =  createdAt || new Date() 
-                const values = [userId, name, lastName, bio || null, photoURL || null, gender , created_at];
+            if (userResult.length === 0) {
+                const error = new Error("El usuario no existe");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                database.query(query, values, (error, results) => {
-                    if (error) return reject(error);
+            const [profileResult] = await database.query("SELECT * FROM profile WHERE user_id = ?", [userId]);
 
-                    const newProfile = new ProfileDTO(results.insertId, userId, name, lastName, bio, photoURL, gender, created_at);
-                    resolve(newProfile);
-                });
-            });
-        });
+            if (profileResult.length > 0) {
+                const error = new Error("Ya existe el perfil del usuario");
+                error.statusCode = 400;
+                throw error;
+            }
+
+            const query = `
+                INSERT INTO profile (user_id, name, last_name, bio, photo_url, gender, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `;
+
+            const values = [
+                userId,
+                name,
+                lastName,
+                bio || null,
+                photoURL || null,
+                gender,
+                createdAt || new Date(),
+            ];
+
+            const [insertResult] = await database.query(query, values);
+
+            const newProfile = new ProfileDTO(
+                insertResult.insertId,
+                userId,
+                name,
+                lastName,
+                bio,
+                photoURL,
+                gender,
+                createdAt
+            );
+
+            return newProfile;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async updateProfile(userId, name, lastName, bio, photoURL, gender) {
-        return new Promise((resolve, reject) => {
-            database.query("SELECT id FROM profile WHERE user_id = ?", [userId], (err, results) => {
-                if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("El perfil no existe"));
+        try {
+            const [profileResult] = await database.query("SELECT id FROM profile WHERE user_id = ?", [userId]);
 
-                const query = `
-                    UPDATE profile 
-                    SET name = ?, last_name = ?, bio = ?, photo_url = ?, gender = ?
-                    WHERE user_id = ?
-                `;
-                const values = [name || null, lastName || null, bio || null, photoURL || null, gender || null, userId];
+            if (profileResult.length === 0) {
+                const error = new Error("El perfil no existe");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                database.query(query, values, (error, results) => {
-                    if (error) return reject(error);
-                    resolve(true);
-                });
-            });
-        });
+            const query = `
+                UPDATE profile 
+                SET name = ?, last_name = ?, bio = ?, photo_url = ?, gender = ?
+                WHERE user_id = ?
+            `;
+
+            const values = [name || null, lastName || null, bio || null, photoURL || null, gender || null, userId];
+
+            const [updateResult] = await database.query(query, values);
+
+            if (updateResult.affectedRows === 0) {
+                const error = new Error("No se pudo actualizar el perfil");
+                error.statusCode = 400;
+                throw error;
+            }
+
+            return { message: "Perfil actualizado exitosamente" };
+        } catch (error) {
+            throw error;
+        }
     }
 
     async deleteProfile(userId) {
-        return new Promise((resolve, reject) => {
-            database.query("DELETE FROM profile WHERE user_id = ?", [userId], (error, results) => {
-                if (error) return reject(error);
-                if (results.affectedRows === 0) return reject(new Error("El perfil no existe"));
+        try {
+            const [results] = await database.query("DELETE FROM profile WHERE user_id = ?", [userId]);
+            if (results.affectedRows === 0) {
+                const error = new Error("El perfil no existe");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                resolve(true);
-            });
-        });
+            return { message: "Perfil eliminado exitosamente" };
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
