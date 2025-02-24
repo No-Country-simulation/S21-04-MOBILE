@@ -1,87 +1,54 @@
-const database = require("../config/db");
+const ProfileService = require("../services/profileService");
 
-exports.getProfile = (req, res) => {
-    const { id } = req.params;
-    // get profile from database
-    database.query(
-        "SELECT * FROM profile WHERE id = ?",
-        [id],
-        (error, results) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).send({ error: 'Error en el servidor' });
-            }
-
-            if (results.length === 0) {
-                return res.status(404).send({ message: 'Perfil no encontrado' });
-            }
-
-            res.status(200).send({ data: results[0] });
-        })
+exports.getProfile = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const profile = await ProfileService.getProfile(id);
+    res.status(200).send({ data: profile });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message || 'Error en el servidor' });
+  }
 };
 
-exports.postProfile = (req, res) => {
-    const { userId, lastName, bio, photoURL, gender } = req.body;
-    // validate if exists user by id
-    database.query("SELECT id FROM user WHERE id = ?", [userId], (err, results) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send({ error: 'Error en el servidor' });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).send({ error: 'El usuario no existe' });
-        }
-
-        // creating profile
-        const query = `
-            INSERT INTO profile (user_id, last_name, bio, photo_url, gender)
-            VALUES (?, ?, ?, ?, ?)
-        `;
-        const values = [userId, lastName, bio || null, photoURL || null, gender];
-
-        database.query(query, values, (error, results) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).send({ error: 'Error al crear el perfil' });
-            }
-
-            res.status(201).send({ message: 'Perfil creado exitosamente', profileId: results.insertId });
-        });
-    });
+exports.postProfile = async (req, res) => {
+  const { userId, lastName, bio, photoURL, gender } = req.body;
+  try {
+    const newProfile = await ProfileService.createProfile(userId, lastName, bio, photoURL, gender);
+    res.status(201).send({ message: 'Perfil creado exitosamente', profile: newProfile });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message || 'Error al crear el perfil' });
+  }
 };
 
-exports.putProfile = (req, res) => {
-    const { id } = req.params;
-    const { lastName, bio, photoURL, gender } = req.body;
-    // validate if exists user by id
-    database.query("SELECT id FROM profile WHERE user_id = ?", [id], (err, results) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send({ error: 'Error en el servidor' });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).send({ error: 'El perfil no existe' });
-        }
-        
-        // updating profile
-        const query = `
-            UPDATE profile 
-            SET last_name = ?, bio = ?, photo_url = ?, gender = ?
-            WHERE user_id = ?
-        `;
-        const values = [lastName || null, bio || null, photoURL || null, gender || null, id];
-
-        database.query(query, values, (error, results) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).send({ error: 'Error al actualizar el perfil' });
-            }
-
-            res.status(200).send({ message: 'Perfil actualizado exitosamente' });
-        });
-    });
+exports.putProfile = async (req, res) => {
+  const { id } = req.params;
+  const { lastName, bio, photoURL, gender } = req.body;
+  try {
+    const updated = await ProfileService.updateProfile(id, lastName, bio, photoURL, gender);
+    if (updated) {
+      res.status(200).send({ message: 'Perfil actualizado exitosamente' });
+    } else {
+      res.status(404).send({ error: 'Perfil no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message || 'Error al actualizar el perfil' });
+  }
 };
 
-// exports.deleteProfile = (req, res) => {};
+exports.deleteProfile = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleted = await ProfileService.deleteProfile(id);
+    if (deleted) {
+      res.status(200).send({ message: 'Perfil eliminado exitosamente' });
+    } else {
+      res.status(404).send({ error: 'Perfil no encontrado' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: error.message || 'Error al eliminar el perfil' });
+  }
+};
