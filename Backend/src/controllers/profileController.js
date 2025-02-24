@@ -1,4 +1,4 @@
-const ProfileService = require("../services/profileService");
+const ProfileService = require("../services/profileServices");
 
 exports.getProfile = async (req, res) => {
   const { id } = req.params;
@@ -12,9 +12,9 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.postProfile = async (req, res) => {
-  const { userId, lastName, bio, photoURL, gender } = req.body;
+  const { userId, name, lastName, bio, photoURL, gender, createdAt } = req.body;
   try {
-    const newProfile = await ProfileService.createProfile(userId, lastName, bio, photoURL, gender);
+    const newProfile = await ProfileService.createProfile(userId, name, lastName, bio, photoURL, gender, createdAt);
     res.status(201).send({ message: 'Perfil creado exitosamente', profile: newProfile });
   } catch (error) {
     console.error(error);
@@ -24,9 +24,9 @@ exports.postProfile = async (req, res) => {
 
 exports.putProfile = async (req, res) => {
   const { id } = req.params;
-  const { lastName, bio, photoURL, gender } = req.body;
+  const { name, lastName, bio, photoURL, gender } = req.body;
   try {
-    const updated = await ProfileService.updateProfile(id, lastName, bio, photoURL, gender);
+    const updated = await ProfileService.updateProfile(id, name, lastName, bio, photoURL, gender);
     if (updated) {
       res.status(200).send({ message: 'Perfil actualizado exitosamente' });
     } else {
