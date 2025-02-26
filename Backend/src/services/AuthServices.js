@@ -1,6 +1,7 @@
 const database = require("../config/db");
 const UserDTO = require("../models/User");
 const bcrypt = require('bcryptjs');
+const jwt = require('jwt')
  
 class AuthService {
     async getUser(userId) {
@@ -52,9 +53,29 @@ class AuthService {
 
     async login(email, password) {
         try {
-           
-        } catch (error) {
+           const [result] = await database.query("SELECT * FROM user WHERE id = ?", [userId]);
 
+           if (result.length === 0) {
+             const error = new Error("Usuario no encontrado");
+             error.statusCode = 401;
+             throw error
+           }
+
+           const user = result[0];
+           const isMatch = await bcrypt.compare(password, user.password);
+
+           if (!isMatch) {
+             const error = new Error("Contraseña incorrecta");
+             error.statusCode = 401;
+             throw error
+           }
+
+           const payload = { id: user.id, email: user.email };
+           const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
+
+           return token
+        } catch (error) {
+           throw error;
         }
     }
 }
