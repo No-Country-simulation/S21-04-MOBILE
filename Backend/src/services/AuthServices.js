@@ -78,4 +78,19 @@ class AuthService {
            throw error;
         }
     }
+
+    async deleteUser(id) {
+        try {
+            const [results] = await database.query("DELETE FROM user WHERE id = ?", [id]);
+            if (results.affectedRows === 0) {
+                const error = new Error("El usuario no existe");
+                error.statusCode = 404;
+                throw error;
+            }
+
+            return { message: "Usuario eliminado exitosamente" };
+        } catch (error) {
+            throw error;
+        }
+    }
 }
