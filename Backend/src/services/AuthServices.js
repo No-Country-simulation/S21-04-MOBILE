@@ -80,10 +80,18 @@ class AuthService {
              throw error
            }
 
+           const profile = await ProfileService.getProfile(user.id);
            const payload = { id: user.id, email: user.email };
            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
 
-           return token
+           return { 
+            token, 
+            data: { 
+             ...profile, 
+             id: user.id, 
+             email: user.email 
+            }
+           }
         } catch (error) {
            throw error;
         }
