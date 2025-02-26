@@ -1,5 +1,6 @@
 const database = require("../config/db");
 const UserDTO = require("../models/User");
+const ProfileService = require("./profileServices.js");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
  
@@ -18,7 +19,7 @@ class AuthService {
         return new UserDTO(id, email);
     }
 
-    async registerUser(email, password) {
+    async registerUser(email, password, name) {
         try {
           const [result] = await database.query("SELECT id from user WHERE email = ?", [email]);
 
@@ -45,7 +46,16 @@ class AuthService {
 
           const [insertResult] = await database.query(query, values);
 
-          return new UserDTO(insertResult.insertId, email);
+          // Crear perfil
+          const profileCreated = await ProfileService.createProfile(
+            insertResult.insertId, name
+          );
+         
+          const userCreated = new UserDTO(insertResult.insertId, email);
+          return {
+           ...userCreated,
+           ...profileCreated
+          }
         } catch (error) { 
            throw error;
         }
