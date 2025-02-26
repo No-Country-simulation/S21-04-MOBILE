@@ -1,7 +1,7 @@
 const database = require("../config/db");
 const UserDTO = require("../models/User");
 const bcrypt = require('bcryptjs');
-const jwt = require('jwt')
+const jwt = require('jsonwebtoken')
  
 class AuthService {
     async getUser(userId) {
@@ -20,7 +20,7 @@ class AuthService {
 
     async registerUser(email, password) {
         try {
-          const [userResult] = await database.query("SELECT id from user WHERE email = ?", [email]);
+          const [result] = await database.query("SELECT id from user WHERE email = ?", [email]);
 
           if(result.length !== 0) {
             // usuario ya existe
@@ -53,7 +53,7 @@ class AuthService {
 
     async login(email, password) {
         try {
-           const [result] = await database.query("SELECT * FROM user WHERE id = ?", [userId]);
+           const [result] = await database.query("SELECT * FROM user WHERE email = ?", [email]);
 
            if (result.length === 0) {
              const error = new Error("Usuario no encontrado");
