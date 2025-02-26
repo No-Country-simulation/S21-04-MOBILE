@@ -49,6 +49,24 @@ exports.register = async (req, res) => {
     }
 };
 
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await UserServiced.deleteUser(id);
+
+    res.status(200).send({ message: deleted.message });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
+
+    if (error.statusCode) {
+      return res.status(error.statusCode).send({ error: error.message });
+    }
+
+    res.status(500).send({ error: 'Error interno del servidor' });
+  };
+}
+
 exports.verifyToken = (req, res) => {
     const authHeader = req.headers['authorization'];
 
