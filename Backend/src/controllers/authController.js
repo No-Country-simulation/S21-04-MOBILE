@@ -25,14 +25,14 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     if (!email || !password) {
       return res.status(400).send({ error: 'email y password son obligatorios' });
     }
     
     try { 
-        const newUser = await AuthServices.registerUser(email, password);
+        const newUser = await AuthServices.registerUser(email, password, name);
 
         res.status(201).send({
           message: "Usuario creado exitosamente",
@@ -53,7 +53,7 @@ exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deleted = await UserServiced.deleteUser(id);
+    const deleted = await AuthServices.deleteUser(id);
 
     res.status(200).send({ message: deleted.message });
   } catch (error) {
