@@ -1,90 +1,114 @@
-const database = require("../../../config/db");
+const database = require("../config/db");
 const ContactDTO = require("../models/Contact");
 
 class ContactService {
-    async getContact(id) {
-        return new Promise((resolve, reject) => {
-            database.query("SELECT * FROM contact WHERE id = ?", [id], (error, results) => {
-                if (error) return reject(error);
-                if (results.length === 0) return reject(new Error("Contacto no encontrado"));
+    async getContact(userId) {
+        const [result] = await database.query("SELECT * FROM contact WHERE user_id = ?", [userId]);
 
-                const dbContact = results[0];
-                const contact = new ContactDTO(
-                    dbContact.id,
-                    dbContact.user_id,
-                    dbContact.name,
-                    dbContact.last_name,
-                    dbContact.email,
-                    dbContact.phone,
-                    dbContact.created_at
-                );
-                resolve(contact);
-            });
-        });
+        if (result.length === 0) {
+            const error = new Error("Datos de contacto no encontrado");
+            error.statusCode = 404;
+            throw error
+        }
+
+        const { id, user_id, spotify, youtube, phone } = result[0];
+
+        return new ContactDTO(id, user_id, spotify, youtube, phone);
     }
 
-    async createContact(userId, name, lastName, email, phone) {
-        return new Promise((resolve, reject) => {
-            // Validar si el usuario existe
-            database.query("SELECT id FROM user WHERE id = ?", [userId], (err, results) => {
-                if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("El usuario no existe"));
+    async createContact(userId, spotify, youtube, phone) {
+        try {
+            const [userResult] = await database.query("SELECT id from user WHERE id = ?", [userId]);
 
-                // Crear contacto
-                const query = `
-                    INSERT INTO contact (user_id, name, last_name, email, phone)
-                    VALUES (?, ?, ?, ?, ?)
-                `;
-                const values = [userId, name, lastName, email || null, phone || null];
+            if (userResult.length === 0) {
+                const error = new Error("El usuario no existe");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                database.query(query, values, (error, results) => {
-                    if (error) return reject(error);
+            const [contactResult] = await database.query("SELECT * FROM contact WHERE user_id = ?", [userId]);
 
-                    const newContact = new ContactDTO(
-                        results.insertId,
-                        userId,
-                        name,
-                        lastName,
-                        email,
-                        phone,
-                        new Date()
-                    );
-                    resolve(newContact);
-                });
-            });
-        });
+            if (contactResult.length > 0) {
+                const error = new Error("Ya existe datos de contacto del usuario");
+                error.statusCode = 400;
+                throw error;
+            };
+
+            const query = `
+                INSERT INTO contact (user_id, spotify, youtube, phone, created_at)
+                VALUES (?, ?, ?, ?)
+            `;
+
+            const values = [
+                userId,
+                spotify || null,
+                youtube || null,
+                phone || null,
+                createdAt || new Date()
+            ];
+
+            const [insertResult] = await database.query(query, values);
+
+            const newContact = new ContactDTO(
+                insertResult.insertId,
+                userId,
+                spotify,
+                youtube,
+                phone,
+                createAt
+            );
+
+            return newContact;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async updateContact(id, name, lastName, email, phone) {
-        return new Promise((resolve, reject) => {
-            database.query("SELECT id FROM contact WHERE id = ?", [id], (err, results) => {
-                if (err) return reject(err);
-                if (results.length === 0) return reject(new Error("El contacto no existe"));
+    async updateContact(userId, spotify, youtube, phone) {
+        try {
+            const [contactResult] = await database.query("SELECT id FROM profile WHERE user_id = ?", [userId]);
 
-                const query = `
-                    UPDATE contact
-                    SET name = ?, last_name = ?, email = ?, phone = ?
-                    WHERE id = ?
-                `;
-                const values = [name || null, lastName || null, email || null, phone || null, id];
+            if (contactResult.length === 0) {
+                const error = new Error("El usuario no existe");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                database.query(query, values, (error, results) => {
-                    if (error) return reject(error);
-                    resolve(true); // Retornamos true si se actualizó correctamente
-                });
-            });
-        });
+            const query = `
+                UPDATE contact 
+                SET spotify = ?, youtube = ?, phone = ?
+                WHERE user_id = ?
+            `;
+
+            const values = [spotify || null, youtube || null, phone || null, userId];
+
+            const [updateResult] = await database.query(query, values);
+
+            if (updateResult.affectedRows === 0) {
+                const error = new Error("No se pudo actualizar los datos de contacto");
+                error.statusCode = 400;
+                throw error;
+            }
+
+            return { message: "Datos de contacto actualizado exitosamente" };
+        } catch (error) {
+            throw error;
+        }
     }
 
-    async deleteContact(id) {
-        return new Promise((resolve, reject) => {
-            database.query("DELETE FROM contact WHERE id = ?", [id], (error, results) => {
-                if (error) return reject(error);
-                if (results.affectedRows === 0) return reject(new Error("El contacto no existe"));
+    async deleteContact(userId) {
+        try {
+            const [results] = await database.query("DELETE FROM contact WHERE user_id = ?", [userId]);
+            if (results.affectedRows === 0) {
+                const error = new Error("Los datos de contacto no existen");
+                error.statusCode = 404;
+                throw error;
+            }
 
-                resolve(true); // Retorna true si se eliminó correctamente
-            });
-        });
+            return { message: "Datos de contacto eliminado exitosamente" };
+        } catch (error) {
+            throw error;
+        }
     }
 }
 

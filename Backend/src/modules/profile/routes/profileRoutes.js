@@ -5,6 +5,6 @@ const profileController = require('../controllers/profileController');
 router.get('/:id', profileController.getProfile);
 router.post('/', profileController.postProfile);
 router.put('/:id', profileController.putProfile);
-// router.delete('/', authController.verifyToken);
+router.delete('/:id', profileController.deleteProfile);
 
 module.exports = router;

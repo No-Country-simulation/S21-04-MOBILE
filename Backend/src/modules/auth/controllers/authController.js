@@ -1,32 +1,71 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const AuthServices = require("../services/AuthServices");
 
-const users = [
-    {
-        id: 1,
-        name: 'Juan',
-        age: 22,
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+        
+    if (!email || !password) {
+      return res.status(400).send({ error: 'email y password son obligatorios' });
     }
-];
+    
+    try { 
+        const { token, data } = await AuthServices.login(email, password);
+        
+        res.json({ token, data })
+    } catch (error) {
+        console.error('Error al loguear usuario', error);
 
-exports.login = (req, res) => {
-    const { name, age } = req.body;
-    const user = users.find(u => u.name === name);
+        if (error.statusCode) {
+          return res.status(error.statusCode).send({ error: error.message });
+        }
 
-    if (!user) {
-        return res.status(404).send('User not found');
+        res.status(500).send({ error: 'Error interno del servidor' });
     }
-
-    if (user.age !== age) {
-        return res.status(401).send('Invalid credentials');
-    }
-
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: 3600 // 1 hora
-    });
-
-    res.status(200).send({ auth: true, token });
 };
+
+exports.register = async (req, res) => {
+    const { email, password, name } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).send({ error: 'email y password son obligatorios' });
+    }
+    
+    try { 
+        const newUser = await AuthServices.registerUser(email, password, name);
+
+        res.status(201).send({
+          message: "Usuario creado exitosamente",
+          data: newUser
+        })
+    } catch (error) {
+        console.error('Error al crear usuario', error);
+
+        if (error.statusCode) {
+          return res.status(error.statusCode).send({ error: error.message });
+        }
+
+        res.status(500).send({ error: 'Error interno del servidor' });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deleted = await AuthServices.deleteUser(id);
+
+    res.status(200).send({ message: deleted.message });
+  } catch (error) {
+    console.error('Error al eliminar usuario:', error);
+
+    if (error.statusCode) {
+      return res.status(error.statusCode).send({ error: error.message });
+    }
+
+    res.status(500).send({ error: 'Error interno del servidor' });
+  };
+}
 
 exports.verifyToken = (req, res) => {
     const authHeader = req.headers['authorization'];
@@ -37,7 +76,7 @@ exports.verifyToken = (req, res) => {
 
     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: 'Failed to authenticate token' });
         }

@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+const mysql = require('mysql2/promise');
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -13,6 +13,6 @@ const conn = {
     port: process.env.PORT_DB
 };
 
-const database = mysql.createConnection(conn);
+const database = mysql.createPool(conn);
 
 module.exports = database;
