@@ -1,7 +1,7 @@
 const database = require("../config/db");
 const UserDTO = require("../models/User");
 const bcrypt = require('bcryptjs');
-
+ 
 class ContactService {
     async getUser(userId) {
         const [result] = await database.query("SELECT * FROM user WHERE id = ?", [userId]);
