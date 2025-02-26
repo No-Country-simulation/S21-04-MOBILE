@@ -1,5 +1,5 @@
-const database = require("../config/db");
-const ProfileDTO = require("../dtos/profileDTO");
+const database = require("../../../config/db");
+const ProfileDTO = require("../models/Profile");
 
 class ProfileService {
     // Obtener perfil por ID

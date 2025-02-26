@@ -1,7 +1,7 @@
 const express = require('express'); // Corrige el typo
 const dotenv = require('dotenv');
-const corsMiddleware = require('./middlewares/corsMiddleware');
-const morganMiddleware = require('./middlewares/morganMiddleware');
+const corsMiddleware = require('./middleware/corsMiddleware');
+const morganMiddleware = require('./middleware/morganMiddleware');
 const logger = require('./utils/logger');
 const database = require("./config/db");
 const path = require('path');
@@ -32,9 +32,9 @@ app.use((err, req, res, next) => {
 
 
 // Importa las rutas
-const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes');
-const contactRoutes = require('./routes/contactRoutes');
+const authRoutes = require('./modules/auth/routes/authRoutes');
+const profileRoutes = require('./modules/profile/routes/profileRoutes');
+const contactRoutes = require('./modules/contact/routes/contactRoutes');
 
 // Base route
 app.get('/', (req, res) => {

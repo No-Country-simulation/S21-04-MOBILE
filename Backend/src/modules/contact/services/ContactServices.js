@@ -1,5 +1,5 @@
-const database = require("../config/db");
-const ContactDTO = require("../dtos/contactDTO");
+const database = require("../../../config/db");
+const ContactDTO = require("../models/Contact");
 
 class ContactService {
     async getContact(id) {

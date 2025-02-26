@@ -1,4 +1,4 @@
-const ProfileService = require("../services/ProfileService");
+const ProfileService = require("../services/profileServices");
 
 exports.getProfile = async (req, res) => {
   const { id } = req.params;
