@@ -10,9 +10,9 @@ exports.login = async (req, res) => {
     }
     
     try { 
-        const token = await AuthServices.login(email, password);
+        const { token, data } = await AuthServices.login(email, password);
         
-        res.json({ token })
+        res.json({ token, data })
     } catch (error) {
         console.error('Error al loguear usuario', error);
 
