@@ -3,11 +3,25 @@ const bcrypt = require('bcryptjs');
 const AuthServices = require("../services/AuthServices");
 
 exports.login = (req, res) => {
-    try { 
-        const { email, password } = req.body;
+    const { email, password } = req.body;
+        
+    if (!email || !password) {
+      return res.status(400).send({ error: 'email y password son obligatorios' });
+    }
     
+    try { 
+        const token = await AuthServices.login(email, password);
+        
+        res.json({ token })
     } catch (error) {
-        throw
+        console.error('Error al loguear usuario', error);
+
+        if (error.statusCode) {
+          return res.status(error.statusCode).send({ error: error.message });
+        }
+
+        res.status(500).send({ error: 'Error interno del servidor' });
+    }
 };
 
 exports.register = (req, res) => {
