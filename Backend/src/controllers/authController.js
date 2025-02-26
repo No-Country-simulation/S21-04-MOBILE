@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const AuthServices = require("../services/AuthServices");
 
-exports.login = (req, res) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
         
     if (!email || !password) {
@@ -32,7 +32,7 @@ exports.register = (req, res) => {
     }
     
     try { 
-        const newUser = await AuthService.registerUser(email, password);
+        const newUser = await AuthServices.registerUser(email, password);
 
         res.status(201).send({
           message: "Usuario creado exitosamente",
@@ -58,7 +58,7 @@ exports.verifyToken = (req, res) => {
 
     const token = authHeader.split(' ')[1];
 
-    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return res.status(403).json({ message: 'Failed to authenticate token' });
         }
