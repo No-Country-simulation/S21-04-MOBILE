@@ -4,3 +4,5 @@ class UserDTO {
         this.email = email;
     }
 }
+
+module.exports = UserDTO;  
