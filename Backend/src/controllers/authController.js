@@ -1,31 +1,38 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
-const users = [
-    {
-        id: 1,
-        name: 'Juan',
-        age: 22,
-    }
-];
+const AuthServices = require("../services/AuthServices");
 
 exports.login = (req, res) => {
-    const { name, age } = req.body;
-    const user = users.find(u => u.name === name);
+    try { 
+        const { email, password } = req.body;
+    
+    } catch (error) {
+        throw
+};
 
-    if (!user) {
-        return res.status(404).send('User not found');
+exports.register = (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).send({ error: 'email y password son obligatorios' });
     }
+    
+    try { 
+        const newUser = await AuthService.registerUser(email, password);
 
-    if (user.age !== age) {
-        return res.status(401).send('Invalid credentials');
+        res.status(201).send({
+          message: "Usuario creado exitosamente",
+          data: newUser
+        })
+    } catch (error) {
+        console.error('Error al crear usuario', error);
+
+        if (error.statusCode) {
+          return res.status(error.statusCode).send({ error: error.message });
+        }
+
+        res.status(500).send({ error: 'Error interno del servidor' });
     }
-
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: 3600 // 1 hora
-    });
-
-    res.status(200).send({ auth: true, token });
 };
 
 exports.verifyToken = (req, res) => {
