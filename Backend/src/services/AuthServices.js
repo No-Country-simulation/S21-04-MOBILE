@@ -41,7 +41,7 @@ class AuthService {
               email, 
               passwordHash,
               new Date()
-          }
+          ]
 
           const [insertResult] = await database.query(query, values);
 
