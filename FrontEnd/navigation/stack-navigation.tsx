@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
 
 import { DetailProfileScreen } from '../screens';
 import BottomTabs from "./tabs-navigation";
@@ -19,11 +18,3 @@ export default function StackNavigator() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  activeIcon: {
-    backgroundColor: '#d7044e',
-    padding: 6,
-    borderRadius: 75,
-  },
-});

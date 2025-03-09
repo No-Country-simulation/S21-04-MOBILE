@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
