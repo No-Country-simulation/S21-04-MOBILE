@@ -1,30 +1,75 @@
-import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, FlatList } from "react-native";
 import { useState } from "react";
 import VideoComponent from "./VideoComponent";
+import PostComponent from "./PostComponent";
+import Clip from "../interfaces/clip-interface";
+import PreviewClipComponent from "./PreviewClipComponent";
 
-export default function MenuComponent () {
+interface PostProps {
+  id: number;
+  userId?: number;
+  name: string;
+  time: string;
+  imageURL: string;
+  content: string;
+  hashtags: string[];
+  isFollowing?: boolean;
+}
+
+export default function MenuComponent({ handleSelectClip, POSTS, CLIPS }: { handleSelectClip: (c: Clip) => void, POSTS: PostProps[], CLIPS: any }) {
   const [menu, setMenu] = useState("publicaciones");
-  
+
   const handleMenu = (name: string) => setMenu(name);
   return (
     <View style={styles.container}>
       <View style={styles.tabs}>
-        <TouchableOpacity onPress={() => handleMenu("publicaciones")} style={[ styles.tab, menu === "publicaciones" && styles.selected]}>
+        <TouchableOpacity onPress={() => handleMenu("publicaciones")} style={[styles.tab, menu === "publicaciones" && styles.selected]}>
           <Text style={[styles.textTab, menu === "publicaciones" && styles.textSelected]}>Publicaciones</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleMenu("sample")} style={[ styles.tab, menu === "sample" && styles.selected]}>
+        <TouchableOpacity onPress={() => handleMenu("sample")} style={[styles.tab, menu === "sample" && styles.selected]}>
           <Text style={[styles.textTab, menu === "sample" && styles.textSelected]}>Sample</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleMenu("info")} style={[ styles.tab, menu === "info" && styles.selected]}>
-          <Text style={[styles.textTab, menu === "info" && styles.textSelected]}>Info</Text>
         </TouchableOpacity>
       </View>
       <View>
-          <View style={{ width: 120, height: 200, borderWidth: 2, borderRadius: 10 }}>
-            <VideoComponent />
-          </View>
+        {
+          menu === "publicaciones" ?
+            <Posts POSTS={POSTS} />
+            : <Clips handleSelectClip={handleSelectClip} CLIPS={CLIPS} />
+        }
       </View>
     </View>
+  )
+};
+
+const Posts = ({ POSTS }: { POSTS: PostProps[] }) => {
+  return (
+    <View style={{ marginVertical: 15 }}>
+      {
+        POSTS.map((post: PostProps) => (
+          <PostComponent
+            {...post}
+          />
+        ))
+      }
+    </View>
+  )
+}
+
+const Clips = ({ handleSelectClip, CLIPS }: { handleSelectClip: (c: Clip) => void, CLIPS: Clip[] }) => {
+  return (
+    // @ts-ignore
+    <FlatList keyExtractor={(_: Clip, index: number) => index}
+      data={CLIPS}
+      style={{ padding: 10, gap: 4 }}
+      numColumns={3}
+      renderItem={({ item }: { item: Clip }) => (
+        <PreviewClipComponent
+          item={item}
+          onSelectClip={handleSelectClip}
+          detailUser={false}
+        />
+      )}
+    />
   )
 }
 
@@ -40,14 +85,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     gap: 12
   },
-  
+
   tab: {
     color: "white",
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 10,
   },
-  
+
   selected: {
     // backgroundColor: "black"
     borderBottomWidth: 2,
@@ -57,7 +102,7 @@ const styles = StyleSheet.create({
   textTab: {
     color: "white"
   },
-  
+
   textSelected: {
     color: "white",
     fontWeight: 600

@@ -1,46 +1,16 @@
-import { View, FlatList, TouchableOpacity, Image, Text } from 'react-native';
-import VideoComponent from './VideoComponent';
+import { FlatList } from 'react-native';
 
-import { Clip, CLIPS } from '../hardcode/clips';
+import { CLIPS } from '../hardcode/clips';
+import Clip from '../interfaces/clip-interface';
+import PreviewClipComponent from './PreviewClipComponent';
 
-export default function ClipsListComponent({
-    onSelectClip,
-}: {
+export default function ClipsListComponent(props: {
     onSelectClip: (c: Clip) => void;
 }) {
     return (
         <FlatList
             data={CLIPS}
-            renderItem={({ item }: { item: Clip }) => (
-                <TouchableOpacity
-                    style={{
-                        width: 110,
-                        height: 160,
-                        borderRadius: 5,
-                        marginHorizontal: 4,
-                        position: 'relative',
-                    }}
-                    onPress={() => onSelectClip(item)}>
-                    <VideoComponent videoSource={item.videoURL} />
-                    <View
-                        style={{
-                            position: 'absolute',
-                            gap: 5,
-                            width: '100%',
-                            height: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                        <Image
-                            source={{ uri: item.imageURL }}
-                            style={{ width: 40, height: 40, borderRadius: 100 }}
-                        />
-                        <Text style={{ fontWeight: 800, fontSize: 12, color: '#ffffff' }}>
-                            {item.username}
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            )}
+            renderItem={({ item }: { item: Clip }) => <PreviewClipComponent item={item} {...props} />}
             keyExtractor={(_, index) => String(index)}
             horizontal={true}
             showsHorizontalScrollIndicator={false}

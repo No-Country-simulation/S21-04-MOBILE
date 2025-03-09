@@ -12,17 +12,34 @@ import PROFILE from '../hardcode/profile';
 import MenuComponent from '../components/MenuComponent';
 import TagComponent from '../components/TagComponent';
 import GradientComponent from "../components/GradientComponent"
+import { Provider } from 'react-native-paper';
+import ModalComponent from '../components/ModalComponent';
+import Clip from '../interfaces/clip-interface';
+import React from 'react';
 
 export default function ProfileScreen() {
+  const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+
+  const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.scrollView}>
-        <GradientComponent />
-        <Header />
-        <Links />
-        <MenuComponent />
-      </ScrollView>
-    </SafeAreaView>
+    <Provider>
+      {selectedClip && (
+        <ModalComponent
+          visible={!!selectedClip}
+          closeModal={() => handleSelectClip(null)}
+          selectedClip={selectedClip}
+        />
+      )}
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView style={styles.scrollView}>
+          <GradientComponent />
+          <Header />
+          <Links />
+          <MenuComponent handleSelectClip={handleSelectClip} POSTS={PROFILE.posts} CLIPS={PROFILE.clips} />
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

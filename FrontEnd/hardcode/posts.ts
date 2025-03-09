@@ -1,5 +1,6 @@
 export const POSTS = [
     {
+        id: 1,
         userId: 4,
         name: 'Paula Prieto',
         time: 'Hace 2hr.',
@@ -10,6 +11,7 @@ export const POSTS = [
         hashtags: ['Folk', 'Cantautor'],
     },
     {
+        id: 2,
         userId: 6,
         name: 'Sebastian Nievas',
         time: 'Hace 3hr.',

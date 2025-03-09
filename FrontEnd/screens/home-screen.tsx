@@ -1,23 +1,20 @@
 import React from 'react';
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  Image,
+  Image, SafeAreaView,
+  ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Provider } from 'react-native-paper';
 
 // Components
 import ClipsListComponent from '../components/ClipsListComponent';
-import PostComponent from '../components/PostComponent';
 import ModalComponent from '../components/ModalComponent';
+import PostComponent from '../components/PostComponent';
 
 // Hardcode
-import { Clip, CLIPS } from "../hardcode/clips";
 import { POSTS } from "../hardcode/posts";
+
+// Interfaces
+import Clip from '../interfaces/clip-interface';
 
 enum Menu {
   "tendencias",

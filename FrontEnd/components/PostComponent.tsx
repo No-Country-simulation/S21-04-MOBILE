@@ -4,13 +4,14 @@ import PROFILE from '../hardcode/profile';
 import { useNavigation } from '@react-navigation/native';
 
 interface PostProps {
-  userId: number;
+  id: number,
+  userId?: number;
   name: string;
   time: string;
   imageURL: string;
   content: string;
   hashtags: string[];
-  isFollowing: boolean;
+  isFollowing?: boolean;
 }
 
 const PostComponent = ({
@@ -26,21 +27,23 @@ const PostComponent = ({
 
   return (
     <View style={styles.container}>
+      {/* @ts-ignore */}
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Detail', { userId })}>
+        {/* @ts-ignore */}
+        <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId })}>
           <Image
             source={
               imageURL === 'user'
                 ? require('../assets/user.png')
                 : imageURL === 'user2'
-                ? require('../assets/user-2.jpg')
-                : PROFILE.imageURL
+                  ? require('../assets/user-2.jpg')
+                  : PROFILE.imageURL
             }
             style={styles.profileImage}
           />
         </TouchableOpacity>
         <View style={styles.headerText}>
+          {/* @ts-ignore */}
           <Text style={styles.username}>{name}</Text>
           <Text style={styles.time}>{time}</Text>
         </View>
@@ -57,6 +60,7 @@ const PostComponent = ({
         <Text style={styles.hashtag}>{JSON.stringify(hashtags)}</Text>
       </Text>
 
+      {/* @ts-ignore */}
       <View style={styles.footer}>
         <FontAwesome name="heart-o" size={16} color="#fff" />
         <FontAwesome name="comment-o" size={16} color="#fff" />

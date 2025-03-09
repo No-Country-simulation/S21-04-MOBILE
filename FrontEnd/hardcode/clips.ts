@@ -1,11 +1,4 @@
-export interface Clip {
-    videoURL: string,
-    imageURL: string,
-    username: string,
-    name: string,
-    content?: string,
-    tags?: string[]
-}
+import Clip from "../interfaces/clip-interface";
 
 export const CLIPS: Clip[] = [
     {
