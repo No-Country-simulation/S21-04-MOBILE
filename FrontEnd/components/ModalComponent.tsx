@@ -1,15 +1,16 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Portal, Modal } from 'react-native-paper';
-import VideoComponent from './VideoComponent';
+import { Clip } from '../hardcode/clips';
+import ClipFullScreen from './ClipFullScreen';
 
 export default function ModalComponent({
   visible,
   closeModal,
-  selectedVideo,
+  selectedClip,
 }: {
   visible: boolean;
   closeModal: () => void;
-  selectedVideo: string;
+  selectedClip: Clip;
 }) {
   return (
     <Portal>
@@ -17,8 +18,8 @@ export default function ModalComponent({
         visible={visible}
         onDismiss={closeModal}
         contentContainerStyle={styles.modalContainer}>
-        {selectedVideo && (
-          <VideoComponent videoSource={selectedVideo} fullScreen />
+        {selectedClip && (
+          <ClipFullScreen fullScreen={visible} {...selectedClip} />
         )}
         <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
           <Text style={styles.closeText}>✕</Text>
