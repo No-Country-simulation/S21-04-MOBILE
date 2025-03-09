@@ -14,19 +14,36 @@ import MusicianCard from '../components/MusicianCard';
 import USERS from '../hardcode/users';
 import { useNavigation } from '@react-navigation/native';
 import GenreCard from '../components/GenreCard';
-import { ClipsList } from "./home-screen";
+import Clip from '../interfaces/clip-interface';
+import { Provider } from 'react-native-paper';
+import ClipsListComponent from '../components/ClipsListComponent';
+import React from 'react';
+import ModalComponent from '../components/ModalComponent';
 
 export default function SearchScreen() {
+  const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+
+  const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.scrollView}>
-        <Buscador />
-        <UsuariosDestacados />
-        <Generos />
-        <UsuariosSugeridos />
-        <ClipsTendencia />
-      </ScrollView>
-    </SafeAreaView>
+    <Provider>
+      {selectedClip && (
+        <ModalComponent
+          visible={!!selectedClip}
+          closeModal={() => handleSelectClip(null)}
+          selectedClip={selectedClip}
+        />
+      )}
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView style={styles.scrollView}>
+          <Buscador />
+          <UsuariosDestacados />
+          <Generos />
+          <UsuariosSugeridos />
+          <ClipsTendencia onSelectClip={handleSelectClip} />
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
@@ -60,14 +77,14 @@ const UsuariosDestacados = () => {
       <FlatList
         data={USERS}
         renderItem={({ item }: { item: any }) => (
-          <TouchableOpacity
+          // @ts-ignore
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}>
             style={{
               width: 170,
               height: 250,
               borderRadius: 15,
               marginHorizontal: 4,
             }}
-            onPress={() => navigation.navigate('Detail', { userId: item.id })}>
             <MusicianCard {...item} />
           </TouchableOpacity>
         )}
@@ -130,14 +147,14 @@ const UsuariosSugeridos = () => {
       <FlatList
         data={USERS.reverse()}
         renderItem={({ item }: { item: any }) => (
-          <TouchableOpacity
+          // @ts-ignore
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}>
             style={{
               width: 170,
               height: 250,
               borderRadius: 15,
               marginHorizontal: 4,
             }}
-            onPress={() => navigation.navigate('Detail', { userId: item.id })}>
             <MusicianCard {...item} />
           </TouchableOpacity>
         )}
@@ -154,18 +171,18 @@ const UsuariosSugeridos = () => {
   );
 };
 
-const ClipsTendencia = () => {
+const ClipsTendencia = ({ onSelectClip }: { onSelectClip: (c: Clip) => void }) => {
   return (
     <View style={{ marginBottom: 10 }}>
       <Title s={"Clips que están marcando tendencia"} style={{ marginLeft: 20 }} />
       <Title s={"#Folk"} style={{ marginLeft: 20 }} />
-      <ClipsList onSelectVideo={(v: string) => null} />
+      <ClipsListComponent onSelectClip={onSelectClip} />
       <Title s={"#Jazz"} style={{ marginLeft: 20 }} />
-      <ClipsList onSelectVideo={(v: string) => null} />
+      <ClipsListComponent onSelectClip={onSelectClip} />
       <Title s={"#R&B"} style={{ marginLeft: 20 }} />
-      <ClipsList onSelectVideo={(v: string) => null} />
+      <ClipsListComponent onSelectClip={onSelectClip} />
       <Title s={"#Cover"} style={{ marginLeft: 20 }} />
-      <ClipsList onSelectVideo={(v: string) => null} />
+      <ClipsListComponent onSelectClip={onSelectClip} />
     </View>
   );
 };

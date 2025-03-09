@@ -18,6 +18,8 @@ const USERS = [
       { name: 'Instagram', url: '' },
       { name: 'Tiktok', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
   {
     name: 'Mariana López',
@@ -36,6 +38,8 @@ const USERS = [
       { name: 'Instagram', url: '' },
       { name: 'Bandcamp', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
   {
     isFollowing: false,
@@ -54,6 +58,8 @@ const USERS = [
       { name: 'YouTube', url: '' },
       { name: 'SoundCloud', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
   {
     isFollowing: false,
@@ -71,6 +77,8 @@ const USERS = [
       { name: 'YouTube', url: '' },
       { name: 'SoundCloud', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
   {
     isFollowing: false,
@@ -89,6 +97,8 @@ const USERS = [
       { name: 'Facebook', url: '' },
       { name: 'YouTube', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
   {
     isFollowing: false,
@@ -106,6 +116,8 @@ const USERS = [
       { name: 'Facebook', url: '' },
       { name: 'YouTube', url: '' },
     ],
+    posts: [],
+    clips:[]
   },
 ];
 

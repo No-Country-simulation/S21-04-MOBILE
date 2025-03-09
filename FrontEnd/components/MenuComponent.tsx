@@ -43,24 +43,28 @@ export default function MenuComponent({ handleSelectClip, POSTS, CLIPS }: { hand
 
 const Posts = ({ POSTS }: { POSTS: PostProps[] }) => {
   return (
-    <View style={{ marginVertical: 15 }}>
+    <View style={{ padding: 20 }}>
       {
+        POSTS.length ?
         POSTS.map((post: PostProps) => (
           <PostComponent
             {...post}
           />
-        ))
+        )) : <Text style={{ textAlign: "center", color: "white" }}>No hay publicaciones</Text>
       }
     </View>
   )
 }
 
 const Clips = ({ handleSelectClip, CLIPS }: { handleSelectClip: (c: Clip) => void, CLIPS: Clip[] }) => {
+  if(!CLIPS.length) return <Text style={{ textAlign: "center", color: "white", marginVertical: 10 }}>No hay clips</Text>
+
   return (
     // @ts-ignore
     <FlatList keyExtractor={(_: Clip, index: number) => index}
       data={CLIPS}
       style={{ padding: 10, gap: 4 }}
+      columnWrapperStyle={{ marginBottom: 6 }}
       numColumns={3}
       renderItem={({ item }: { item: Clip }) => (
         <PreviewClipComponent

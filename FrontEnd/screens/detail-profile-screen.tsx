@@ -6,16 +6,23 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import USERS from '../hardcode/users';
 import MenuComponent from '../components/MenuComponent';
+import GradientComponent from '../components/GradientComponent';
+import Clip from '../interfaces/clip-interface';
+import ModalComponent from '../components/ModalComponent';
+import { Provider } from 'react-native-paper';
 
 export default function DetailProfileScreen({ route }: { route: any }) {
   const { userId } = route.params;
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+
+  const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
 
   useEffect(() => {
     const user = USERS.filter((x) => x.id === userId)[0];
@@ -30,70 +37,73 @@ export default function DetailProfileScreen({ route }: { route: any }) {
   if (!currentUser) return null;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <LinearGradient
-        colors={['#d7044e', '#222222']}
-        locations={[0.17, 0.905]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        style={styles.gradient}
-      />
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
-          <ImagePickerComponent
-            disabled={true}
-            uri={currentUser.imageURL}
-            size="large"
+    <Provider>
+      <SafeAreaView style={styles.safeArea}>
+        {selectedClip && (
+          <ModalComponent
+            visible={!!selectedClip}
+            closeModal={() => handleSelectClip(null)}
+            selectedClip={selectedClip}
           />
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View>
-              <Name name={currentUser.name} />
-              <Username username={currentUser.username} />
+        )}
+        <ScrollView style={styles.scrollView}>
+          <GradientComponent />
+          <View style={styles.header}>
+            <ImagePickerComponent
+              disabled={true}
+              uri={currentUser.imageURL}
+              size="large"
+            />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View>
+                <Name name={currentUser.name} />
+                <Username username={currentUser.username} />
+              </View>
+              <Location location={currentUser.location} />
             </View>
-            <Location location={currentUser.location} />
-          </View>
-          <Bio bio={currentUser.bio} />
-          <Tags tags={currentUser.tags} />
-          <Text style={styles.follow}>
-            {currentUser.followers} Seguidores • {currentUser.following}{' '}
-            Siguiendo
-          </Text>
-          <View style={styles.actions}>
-            <TouchableOpacity style={styles.followButton}>
-              <Text style={styles.followText}>
-                {currentUser.isFollowing ? '- Dejar de seguir' : '+ Seguir'}
-              </Text>
-            </TouchableOpacity>
+            <Bio bio={currentUser.bio} />
+            <Tags tags={currentUser.tags} />
+            <Text style={styles.follow}>
+              {currentUser.followers} Seguidores • {currentUser.following}{' '}
+              Siguiendo
+            </Text>
+            <View style={styles.actions}>
+              <TouchableOpacity style={styles.followButton}>
+                <Text style={styles.followText}>
+                  {currentUser.isFollowing ? '- Dejar de seguir' : '+ Seguir'}
+                </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => null}>
-              <FontAwesome name="comment-o" size={16} color="#fff" />
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => null}>
+                <FontAwesome name="comment-o" size={16} color="#fff" />
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={() => null}>
-              <FontAwesome size={16} color="white" name="share" />
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => null}>
+                <FontAwesome size={16} color="white" name="share" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View style={styles.links}>
-          <Text style={styles.titleLink}>También estoy en</Text>
-          <View style={styles.containerLinks}>
-            {[
-              { label: 'Spotify', selected: false },
-              { label: 'Youtube', selected: false },
-              { label: 'Instagram', selected: false },
-            ].map((tag, index) => (
-              <TagComponent
-                selected={tag.selected}
-                label={tag.label}
-                key={index}
-              />
-            ))}
+          <View style={styles.links}>
+            <Text style={styles.titleLink}>También estoy en</Text>
+            <View style={styles.containerLinks}>
+              {[
+                { label: 'Spotify', selected: false },
+                { label: 'Youtube', selected: false },
+                { label: 'Instagram', selected: false },
+              ].map((tag, index) => (
+                <TagComponent
+                  selected={tag.selected}
+                  label={tag.label}
+                  key={index}
+                />
+              ))}
+            </View>
           </View>
-        </View>
-        <MenuComponent />
-      </ScrollView>
-    </SafeAreaView>
+          <MenuComponent handleSelectClip={handleSelectClip} POSTS={currentUser.posts} CLIPS={currentUser.clips} />
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
