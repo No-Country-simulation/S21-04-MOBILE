@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
   video: {
     width: '100%',
     height: '100%',
-    borderRadius: 20,
+    borderRadius: "inherit",
   },
 });

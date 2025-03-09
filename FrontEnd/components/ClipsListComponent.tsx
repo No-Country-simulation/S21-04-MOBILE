@@ -7,7 +7,7 @@ export default function ClipsList({
     onSelectVideo,
     CLIPS
 }: {
-    onSelectVideo: (video: string) => void;
+    onSelectVideo: (video: Clip) => void;
     CLIPS: Clip[]
 }) {
     return (
@@ -15,9 +15,21 @@ export default function ClipsList({
             data={CLIPS}
             renderItem={({ item }: { item: Clip }) => (
                 <TouchableOpacity
-                    style={{ width: 100, height: 140, borderRadius: 15 }}
-                    onPress={() => onSelectVideo(item.videoURL)}>
-                    <View style={{ position: "absolute", gap: 5, width: "100%", height: "100%" }}>
+                    style={{
+                        width: 110,
+                        height: 160,
+                        borderRadius: 5,
+                        marginHorizontal: 4,
+                        position: 'relative',
+                    }}
+                    onPress={() => onSelectVideo(item)}>
+                    <View style={{
+                        width: 110,
+                        height: 160,
+                        borderRadius: 5,
+                        marginHorizontal: 4,
+                        position: 'relative',
+                    }}>
                         <Image source={{ uri: item.imageURL }} style={{ width: 40, height: 40, borderRadius: 100 }} />
                         <Text style={{ fontWeight: 800, fontSize: 12, color: "#ffffff" }}>{item.username}</Text>
                     </View>

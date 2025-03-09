@@ -16,7 +16,7 @@ import PostComponent from '../components/PostComponent';
 import ModalComponent from '../components/ModalComponent';
 
 // Hardcode
-import { CLIPS } from "../hardcode/clips";
+import { Clip, CLIPS } from "../hardcode/clips";
 import { POSTS } from "../hardcode/posts";
 
 enum Menu {
@@ -27,23 +27,23 @@ enum Menu {
 interface MenuProps {
   menu: Menu,
   handleMenu: (s: Menu) => void,
-  handleSelectVideo: (s: string) => void
+  handleSelectVideo: (s: Clip) => void
 }
 
 export default function HomeScreen() {
   const [menu, setMenu] = React.useState<Menu>(Menu["tendencias"]);
-  const [selectedVideo, setSelectedVideo] = React.useState<string | null>(null);
+  const [selectedClip, setSelectedVideo] = React.useState<Clip | null>();
 
   const handleMenu = (s: Menu) => setMenu(s);
-  const handleSelectVideo = (video: string) => setSelectedVideo(video);
+  const handleSelectVideo = (c: Clip | null) => setSelectedVideo(c);
 
   return (
     <Provider>
-      {selectedVideo && (
+      {selectedClip && (
         <ModalComponent
-          visible={!!selectedVideo}
-          closeModal={() => handleSelectVideo('')}
-          selectedVideo={selectedVideo}
+          visible={!!selectedClip}
+          closeModal={() => handleSelectVideo(null)}
+          selectedClip={selectedClip}
         />
       )}
       <SafeAreaView style={styles.safeArea}>
@@ -72,7 +72,7 @@ const Header = () => (
 const Clips = ({
   onSelectVideo,
 }: {
-  onSelectVideo: (video: string) => void;
+  onSelectVideo: (clip: Clip) => void;
 }) => (
   <>
     <Text
@@ -129,7 +129,7 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 );
 
 // Menu component see 
-const MenuComponent = ({ menu, handleSelectVideo }: { menu: Menu, handleSelectVideo: (s: string) => void }) => {
+const MenuComponent = ({ menu, handleSelectVideo }: { menu: Menu, handleSelectVideo: (s: Clip) => void }) => {
   if (menu === Menu["seguidos"]) return null
 
   return (
