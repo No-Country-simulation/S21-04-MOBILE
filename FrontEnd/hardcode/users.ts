@@ -1,6 +1,6 @@
 const USERS = [
   {
-    isFollowing: false, 
+    isFollowing: false,
     id: 1,
     name: 'User Test',
     username: 'user_test',
@@ -21,7 +21,7 @@ const USERS = [
   },
   {
     name: 'Mariana López',
-    isFollowing: false, 
+    isFollowing: false,
     id: 2,
     username: 'mariana_lopez',
     bio: 'Cantante y compositora. Amante de la música acústica y el jazz. Trabajando en mi primer EP.',
@@ -38,7 +38,7 @@ const USERS = [
     ],
   },
   {
-    isFollowing: false, 
+    isFollowing: false,
     id: 3,
     name: 'Carlos Mendoza',
     username: 'carlosmendoza',
@@ -56,7 +56,7 @@ const USERS = [
     ],
   },
   {
-    isFollowing: false, 
+    isFollowing: false,
     id: 6,
     name: 'Sebastian Nievas',
     username: 'snievas',
@@ -73,7 +73,7 @@ const USERS = [
     ],
   },
   {
-    isFollowing: false, 
+    isFollowing: false,
     id: 8,
     name: 'Lucía Fernández',
     username: 'luciaf_music',
@@ -91,7 +91,7 @@ const USERS = [
     ],
   },
   {
-    isFollowing: false, 
+    isFollowing: false,
     id: 4,
     name: 'Paula Prieto',
     username: 'paulaprieto',
