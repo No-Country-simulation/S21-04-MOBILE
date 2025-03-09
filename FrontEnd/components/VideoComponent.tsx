@@ -1,6 +1,6 @@
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { StyleSheet } from 'react-native';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function VideoComponent({
   videoSource,
@@ -9,8 +9,9 @@ export default function VideoComponent({
   videoSource: string;
   fullScreen?: boolean;
 }) {
+  const ref = useRef(null);
   const player = useVideoPlayer(videoSource, (player) => {
-    player.loop = true;
+    player.loop = true
   });
 
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function VideoComponent({
   }, [fullScreen, player]);
 
   return (
-    <VideoView style={styles.video} player={player} nativeControls={false} />
+    <VideoView ref={ref} style={styles.video} contentFit={"cover"} player={player} nativeControls={false} />
   );
 }
 
