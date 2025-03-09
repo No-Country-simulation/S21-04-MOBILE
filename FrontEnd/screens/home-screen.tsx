@@ -27,22 +27,22 @@ enum Menu {
 interface MenuProps {
   menu: Menu,
   handleMenu: (s: Menu) => void,
-  handleSelectVideo: (s: Clip) => void
+  handleSelectClip: (s: Clip) => void
 }
 
 export default function HomeScreen() {
   const [menu, setMenu] = React.useState<Menu>(Menu["tendencias"]);
-  const [selectedClip, setSelectedVideo] = React.useState<Clip | null>();
+  const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
 
   const handleMenu = (s: Menu) => setMenu(s);
-  const handleSelectVideo = (c: Clip | null) => setSelectedVideo(c);
+  const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
 
   return (
     <Provider>
       {selectedClip && (
         <ModalComponent
           visible={!!selectedClip}
-          closeModal={() => handleSelectVideo(null)}
+          closeModal={() => handleSelectClip(null)}
           selectedClip={selectedClip}
         />
       )}
@@ -50,7 +50,7 @@ export default function HomeScreen() {
         <ScrollView style={styles.scrollView}>
           <View style={styles.container}>
             <Header />
-            <MenuContainer menu={menu} handleMenu={handleMenu} handleSelectVideo={handleSelectVideo} />
+            <MenuContainer menu={menu} handleMenu={handleMenu} handleSelectClip={handleSelectClip} />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -70,9 +70,9 @@ const Header = () => (
 
 // Section Clips in Tab Tendencias
 const Clips = ({
-  onSelectVideo,
+  onSelectClip,
 }: {
-  onSelectVideo: (clip: Clip) => void;
+  onSelectClip: (clip: Clip) => void;
 }) => (
   <>
     <Text
@@ -84,7 +84,7 @@ const Clips = ({
       }}>
       Clips para ti
     </Text>
-    <ClipsListComponent CLIPS={CLIPS} onSelectVideo={onSelectVideo} />
+    <ClipsListComponent onSelectClip={onSelectClip} />
   </>
 );
 
@@ -129,12 +129,12 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 );
 
 // Menu component see 
-const MenuComponent = ({ menu, handleSelectVideo }: { menu: Menu, handleSelectVideo: (s: Clip) => void }) => {
+const MenuComponent = ({ menu, handleSelectClip }: { menu: Menu, handleSelectClip: (s: Clip) => void }) => {
   if (menu === Menu["seguidos"]) return null
 
   return (
     <>
-      <Clips onSelectVideo={handleSelectVideo} />
+      <Clips onSelectClip={handleSelectClip} />
       <Publicaciones />
     </>
   )
@@ -142,11 +142,11 @@ const MenuComponent = ({ menu, handleSelectVideo }: { menu: Menu, handleSelectVi
 
 // Menu container
 const MenuContainer = (
-  { menu, handleMenu, handleSelectVideo }: MenuProps) => {
+  { menu, handleMenu, handleSelectClip }: MenuProps) => {
   return (
     <>
       <Tabs menu={menu} handleMenu={handleMenu} />
-      <MenuComponent handleSelectVideo={handleSelectVideo} menu={menu} />
+      <MenuComponent handleSelectClip={handleSelectClip} menu={menu} />
     </>
   )
 }
