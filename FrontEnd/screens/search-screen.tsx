@@ -78,13 +78,13 @@ const UsuariosDestacados = () => {
         data={USERS}
         renderItem={({ item }: { item: any }) => (
           // @ts-ignore
-          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}>
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
             style={{
               width: 170,
               height: 250,
               borderRadius: 15,
               marginHorizontal: 4,
-            }}
+            }}>
             <MusicianCard {...item} />
           </TouchableOpacity>
         )}
@@ -148,13 +148,13 @@ const UsuariosSugeridos = () => {
         data={USERS.reverse()}
         renderItem={({ item }: { item: any }) => (
           // @ts-ignore
-          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}>
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
             style={{
               width: 170,
               height: 250,
               borderRadius: 15,
               marginHorizontal: 4,
-            }}
+            }}>
             <MusicianCard {...item} />
           </TouchableOpacity>
         )}
@@ -171,17 +171,24 @@ const UsuariosSugeridos = () => {
   );
 };
 
-const ClipsTendencia = ({ onSelectClip }: { onSelectClip: (c: Clip) => void }) => {
+const ClipsTendencia = ({
+  onSelectClip,
+}: {
+  onSelectClip: (c: Clip) => void;
+}) => {
   return (
     <View style={{ marginBottom: 10 }}>
-      <Title s={"Clips que están marcando tendencia"} style={{ marginLeft: 20 }} />
-      <Title s={"#Folk"} style={{ marginLeft: 20 }} />
+      <Title
+        s={'Clips que están marcando tendencia'}
+        style={{ marginLeft: 20 }}
+      />
+      <Title s={'#Folk'} style={{ marginLeft: 20 }} />
       <ClipsListComponent onSelectClip={onSelectClip} />
-      <Title s={"#Jazz"} style={{ marginLeft: 20 }} />
+      <Title s={'#Jazz'} style={{ marginLeft: 20 }} />
       <ClipsListComponent onSelectClip={onSelectClip} />
-      <Title s={"#R&B"} style={{ marginLeft: 20 }} />
+      <Title s={'#R&B'} style={{ marginLeft: 20 }} />
       <ClipsListComponent onSelectClip={onSelectClip} />
-      <Title s={"#Cover"} style={{ marginLeft: 20 }} />
+      <Title s={'#Cover'} style={{ marginLeft: 20 }} />
       <ClipsListComponent onSelectClip={onSelectClip} />
     </View>
   );

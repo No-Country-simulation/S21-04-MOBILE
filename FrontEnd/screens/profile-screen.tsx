@@ -1,21 +1,17 @@
-import {
-  Text,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import ImagePickerComponent from '../components/ImagePickerComponent';
-import { FontAwesome, Feather } from '@expo/vector-icons';
-import PROFILE from '../hardcode/profile';
-import MenuComponent from '../components/MenuComponent';
-import TagComponent from '../components/TagComponent';
-import GradientComponent from "../components/GradientComponent"
-import { Provider } from 'react-native-paper';
-import ModalComponent from '../components/ModalComponent';
-import Clip from '../interfaces/clip-interface';
+import { Feather, FontAwesome } from '@expo/vector-icons';
 import React from 'react';
+import {
+  SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
+} from 'react-native';
+import { Provider } from 'react-native-paper';
+import GradientComponent from "../components/GradientComponent";
+import ImagePickerComponent from '../components/ImagePickerComponent';
+import MenuComponent from '../components/MenuComponent';
+import ModalComponent from '../components/ModalComponent';
+import TagComponent from '../components/TagComponent';
+import PROFILE from '../hardcode/profile';
+import Clip from '../interfaces/clip-interface';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
@@ -43,31 +39,35 @@ export default function ProfileScreen() {
   );
 }
 
-const Header = () => (
-  <View style={styles.header}>
-    <ImagePickerComponent disabled={true} uri={PROFILE.imageURL} size="large" />
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <View>
-        <Name name={PROFILE.name} />
-        <Username username={PROFILE.username} />
+const Header = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.header}>
+      <ImagePickerComponent disabled={true} uri={PROFILE.imageURL} size="large" />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View>
+          <Name name={PROFILE.name} />
+          <Username username={PROFILE.username} />
+        </View>
+        <Location location={PROFILE.location} />
       </View>
-      <Location location={PROFILE.location} />
-    </View>
-    <Bio bio={PROFILE.bio} />
-    <Tags tags={PROFILE.tags} />
-    <Text style={styles.follow}>
-      {PROFILE.followers} Seguidores • {PROFILE.following} Siguiendo
-    </Text>
-    <View style={styles.actions}>
-      <TouchableOpacity style={styles.button} onPress={() => null}>
-        <FontAwesome size={16} color="white" name="share" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => null}>
-        <Feather name="edit" size={16} color="white" />
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+      <Bio bio={PROFILE.bio} />
+      <Tags tags={PROFILE.tags} />
+      <Text style={styles.follow}>
+        {PROFILE.followers} Seguidores • {PROFILE.following} Siguiendo
+      </Text>
+      <View style={styles.actions}>
+        <TouchableOpacity style={styles.button} onPress={() => null}>
+          <FontAwesome size={16} color="white" name="share" />
+        </TouchableOpacity>
+        {/* @ts-ignore */}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EditProfile', { userId: item.id })}>
+          <Feather name="edit" size={16} color="white" />
+        </TouchableOpacity>
+      </View>
+    </View >
+  )
+}
 
 const Links = () => (
   <View style={styles.links}>

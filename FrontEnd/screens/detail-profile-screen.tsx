@@ -1,21 +1,21 @@
-import {
-  Text,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import ImagePickerComponent from '../components/ImagePickerComponent';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
-import USERS from '../hardcode/users';
-import MenuComponent from '../components/MenuComponent';
-import GradientComponent from '../components/GradientComponent';
-import Clip from '../interfaces/clip-interface';
-import ModalComponent from '../components/ModalComponent';
+import React, { useEffect, useState } from 'react';
+import {
+  SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
+} from 'react-native';
 import { Provider } from 'react-native-paper';
+
+// Interface
+import Clip from '../interfaces/clip-interface';
+
+// Component
+import GradientComponent from '../components/GradientComponent';
+import ImagePickerComponent from '../components/ImagePickerComponent';
+import MenuComponent from '../components/MenuComponent';
+import ModalComponent from '../components/ModalComponent';
+
+// Hardcode
+import USERS from '../hardcode/users';
 
 export default function DetailProfileScreen({ route }: { route: any }) {
   const { userId } = route.params;
@@ -69,16 +69,17 @@ export default function DetailProfileScreen({ route }: { route: any }) {
               Siguiendo
             </Text>
             <View style={styles.actions}>
+              {/* @ts-ignore */}
               <TouchableOpacity style={styles.followButton}>
                 <Text style={styles.followText}>
                   {currentUser.isFollowing ? '- Dejar de seguir' : '+ Seguir'}
                 </Text>
               </TouchableOpacity>
-
+              {/* @ts-ignore */}
               <TouchableOpacity style={styles.button} onPress={() => null}>
                 <FontAwesome name="comment-o" size={16} color="#fff" />
               </TouchableOpacity>
-
+              {/* @ts-ignore */}
               <TouchableOpacity style={styles.button} onPress={() => null}>
                 <FontAwesome size={16} color="white" name="share" />
               </TouchableOpacity>
@@ -140,14 +141,15 @@ const TagComponent = ({
   iconSize,
   iconColor,
 }: any) => (
-  <TouchableOpacity activeOpacity={0.7}>
+  /* @ts-ignore */
+  < TouchableOpacity activeOpacity={0.7} >
     <View style={[styles.tag, selected && styles.tagSelected, style]}>
       {icon && <Entypo name={icon} size={iconSize} color={iconColor} />}
       <Text style={[styles.tagText, selected && styles.tagTextSelected]}>
         {label}
       </Text>
     </View>
-  </TouchableOpacity>
+  </TouchableOpacity >
 );
 
 const Bio = ({ bio }: { bio: string }) => (
