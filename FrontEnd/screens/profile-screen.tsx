@@ -61,7 +61,7 @@ const Header = () => {
           <FontAwesome size={16} color="white" name="share" />
         </TouchableOpacity>
         {/* @ts-ignore */}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EditProfile', { userId: item.id })}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('EditProfile')}>
           <Feather name="edit" size={16} color="white" />
         </TouchableOpacity>
       </View>
