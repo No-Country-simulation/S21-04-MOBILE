@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instanceAxios = axios.create({
-    baseURL: 'https://some-domain.com/api/',
+    baseURL: 'https://backend-trei-development.onrender.com/api/',
 });
 
 export default instanceAxios;
