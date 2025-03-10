@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet, Button, KeyboardAvoidingView, Platform, ScrollView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { Modal, Portal, IconButton } from "react-native-paper";
 
 const CommentItem = ({ comment }: { comment: any }) => (
@@ -27,7 +27,7 @@ const CommentInput = () => (
 
 const CommentsModal = ({ visible, onDismiss, comments }: { visible: boolean, onDismiss: () => void, comments: any[] }) => {
     return (
-        <Portal>
+        <Portal style={{ position: "relative" }}>
             <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={styles.modal}>
                 <View style={styles.header}>
                     <Text style={styles.title}>Comentarios</Text>
@@ -45,7 +45,7 @@ const CommentsModal = ({ visible, onDismiss, comments }: { visible: boolean, onD
 };
 
 const styles = StyleSheet.create({
-    modal: { backgroundColor: "#121212", padding: 16, borderRadius: 10 },
+    modal: { backgroundColor: "#121212", padding: 16, borderRadius: 10, position: "absolute", bottom: 0, left: 0, right: 0 },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     title: { color: "white", fontSize: 18, fontWeight: "bold" },
     commentItem: { flexDirection: "row", marginVertical: 10 },
