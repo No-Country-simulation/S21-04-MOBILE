@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Backend API Documentation</h1>
+
+    <h2>Overview</h2>
+    <p>Este documento proporciona una descripción general de los endpoints disponibles en el backend, junto con ejemplos de solicitudes y respuestas.</p>
+
+    <h2>Endpoints</h2>
+
+    <h3>Post</h3>
+
+    <h4>GET: Obtener todos los posts</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/posts/</code></p>
+    <p><strong>Método:</strong> <code>GET</code></p>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>[
+    {
+        "id": 1,
+        "type": "sample",
+        "media_url": "https://example.com/image.jpg",
+        "user": 1,
+        "description": "Esto es una muestra.",
+        "likes_count": 5,
+        "comments_count": 3
+    },
+    {
+        "id": 2,
+        "type": "normal",
+        "media_url": "https://example.com/image2.jpg",
+        "user": 2,
+        "description": "Descripción del post de tipo normal",
+        "likes_count": 2,
+        "comments_count": 1
+    }
+]</code></pre>
+
+    <h4>POST: Crear un nuevo post</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/posts/</code></p>
+    <p><strong>Método:</strong> <code>POST</code></p>
+    <p><strong>Cuerpo de la solicitud:</strong></p>
+    <pre><code>{
+    "type": "sample",
+    "media_url": "https://example.com/image.jpg",
+    "user": 1,
+    "sample": {
+        "description": "Esto es una muestra."
+    }
+}</code></pre>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>{
+    "id": 1,
+    "type": "sample",
+    "media_url": "https://example.com/image.jpg",
+    "user": 1,
+    "description": "Esto es una muestra.",
+    "likes_count": 0,
+    "comments_count": 0
+}</code></pre>
+
+    <h4>Modelo Post</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Tipo de dato</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>Integer</td>
+                <td>ID del post</td>
+            </tr>
+            <tr>
+                <td>type</td>
+                <td>CharField</td>
+                <td>Tipo de post (normal, sample, ideas)</td>
+            </tr>
+            <tr>
+                <td>media_url</td>
+                <td>URLField</td>
+                <td>URL del contenido multimedia</td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>ForeignKey</td>
+                <td>ID del usuario que creó el post</td>
+            </tr>
+            <tr>
+                <td>likes</td>
+                <td>ManyToManyField</td>
+                <td>Lista de usuarios que dieron like al post</td>
+            </tr>
+            <tr>
+                <td>comments</td>
+                <td>ManyToManyField</td>
+                <td>Lista de usuarios que comentaron en el post</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de creación</td>
+            </tr>
+            <tr>
+                <td>updated_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de última actualización</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Comment</h3>
+
+    <h4>GET: Obtener un comentario por ID</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/comments/&lt;int:pk&gt;/</code></p>
+    <p><strong>Método:</strong> <code>GET</code></p>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>{
+    "id": 1,
+    "post": 11,
+    "user": 1,
+    "comment": "Este es un segundo comentario de prueba",
+    "created_at": "2025-03-10T12:34:56Z",
+    "updated_at": "2025-03-10T12:34:56Z"
+}</code></pre>
+
+    <h4>POST: Crear un nuevo comentario</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/comments/</code></p>
+    <p><strong>Método:</strong> <code>POST</code></p>
+    <p><strong>Cuerpo de la solicitud:</strong></p>
+    <pre><code>{
+    "post": 11,
+    "user": 1,
+    "comment": "Este es un segundo comentario de prueba"
+}</code></pre>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>{
+    "id": 1,
+    "post": 11,
+    "user": 1,
+    "comment": "Este es un segundo comentario de prueba",
+    "created_at": "2025-03-10T12:34:56Z",
+    "updated_at": "2025-03-10T12:34:56Z"
+}</code></pre>
+
+    <h4>Modelo Comment</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Tipo de dato</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>Integer</td>
+                <td>ID del comentario</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>ForeignKey</td>
+                <td>ID del post al que pertenece el comentario</td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>ForeignKey</td>
+                <td>ID del usuario que creó el comentario</td>
+            </tr>
+            <tr>
+                <td>comment</td>
+                <td>TextField</td>
+                <td>Texto del comentario</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de creación</td>
+            </tr>
+            <tr>
+                <td>updated_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de última actualización</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Likes</h3>
+
+    <h4>GET: Obtener likes de un post por ID</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/likes/11/</code></p>
+    <p><strong>Método:</strong> <code>GET</code></p>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>[
+    {
+        "id": 1,
+        "user": 1,
+        "post": 11,
+        "created_at": "2025-03-10T12:34:56Z",
+        "updated_at": "2025-03-10T12:34:56Z"
+    },
+    {
+        "id": 2,
+        "user": 2,
+        "post": 11,
+        "created_at": "2025-03-10T12:35:56Z",
+        "updated_at": "2025-03-10T12:35:56Z"
+    }
+]</code></pre>
+
+    <h4>POST: Dar like a un post</h4>
+    <p><strong>URL:</strong> <code>http://localhost:8000/api/likes/11/</code></p>
+    <p><strong>Método:</strong> <code>POST</code></p>
+    <p><strong>Cuerpo de la solicitud:</strong></p>
+    <pre><code>{
+    "user": 1
+}</code></pre>
+    <p><strong>Respuesta de ejemplo:</strong></p>
+    <pre><code>{
+    "id": 1,
+    "user": 1,
+    "post": 11,
+    "created_at": "2025-03-10T12:34:56Z",
+    "updated_at": "2025-03-10T12:34:56Z"
+}</code></pre>
+
+    <h4>Modelo Like</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Campo</th>
+                <th>Tipo de dato</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>id</td>
+                <td>Integer</td>
+                <td>ID del like</td>
+            </tr>
+            <tr>
+                <td>post</td>
+                <td>ForeignKey</td>
+                <td>ID del post al que pertenece el like</td>
+            </tr>
+            <tr>
+                <td>user</td>
+                <td>ForeignKey</td>
+                <td>ID del usuario que dio el like</td>
+            </tr>
+            <tr>
+                <td>created_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de creación</td>
+            </tr>
+            <tr>
+                <td>updated_at</td>
+                <td>DateTimeField</td>
+                <td>Fecha y hora de última actualización</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Instalación</h2>
+    <ol>
+        <li>Clona el repositorio:
+            <pre><code>git clone https://github.com/tu-usuario/tu-repositorio.git</code></pre>
+        </li>
+        <li>Navega al directorio del proyecto:
+            <pre><code>cd tu-repositorio</code></pre>
+        </li>
+        <li>Instala las dependencias:
+            <pre><code>pip install -r requirements.txt</code></pre>
+        </li>
+        <li>Realiza las migraciones de la base de datos:
+            <pre><code>python manage.py migrate</code></pre>
+        </li>
+        <li>Inicia el servidor de desarrollo:
+            <pre><code>python manage.py runserver</code></pre>
+        </li>
+    </ol>
+
+    <h2>Contribución</h2>
+    <p>Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:</p>
+    <ol>
+        <li>Haz un fork del repositorio.</li>
+        <li>Crea una nueva rama (<code>git checkout -b feature/nueva-funcionalidad</code>).</li>
+        <li>Realiza tus cambios y haz commit (<code>git commit -am 'Agrega nueva funcionalidad'</code>).</li>
+        <li>Sube tus cambios a tu fork (<code>git push origin feature/nueva-funcionalidad</code>).</li>
+        <li>Abre un Pull Request en el repositorio original.</li>
+    </ol>
+
+    <h2>Licencia</h2>
+    <p>Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo <code>LICENSE</code> para obtener más información.</p>
+</body>
+</html>
