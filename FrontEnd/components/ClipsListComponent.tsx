@@ -6,10 +6,11 @@ import PreviewClipComponent from './PreviewClipComponent';
 
 export default function ClipsListComponent(props: {
     onSelectClip: (c: Clip) => void;
+    clips?: Clip[]
 }) {
     return (
         <FlatList
-            data={CLIPS}
+            data={props.clips ?? CLIPS}
             renderItem={({ item }: { item: Clip }) => <PreviewClipComponent item={item} {...props} />}
             keyExtractor={(_, index) => String(index)}
             horizontal={true}

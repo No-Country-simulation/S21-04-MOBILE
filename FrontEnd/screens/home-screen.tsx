@@ -4,6 +4,7 @@ import {
   ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Provider } from 'react-native-paper';
+import { useStore } from 'zustand';
 
 // Components
 import ClipsListComponent from '../components/ClipsListComponent';
@@ -15,6 +16,7 @@ import { POSTS } from "../hardcode/posts";
 
 // Interfaces
 import Clip from '../interfaces/clip-interface';
+import { GlobalStore } from '../store';
 
 enum Menu {
   "tendencias",
@@ -68,8 +70,10 @@ const Header = () => (
 // Section Clips in Tab Tendencias
 const Clips = ({
   onSelectClip,
+  clips
 }: {
   onSelectClip: (clip: Clip) => void;
+  clips: Clip[]
 }) => (
   <>
     <Text
@@ -81,7 +85,7 @@ const Clips = ({
       }}>
       Clips para ti
     </Text>
-    <ClipsListComponent onSelectClip={onSelectClip} />
+    <ClipsListComponent clips={clips} onSelectClip={onSelectClip} />
   </>
 );
 
@@ -92,7 +96,7 @@ const Publicaciones = () => (
       Últimas Publicaciones
     </Text>
     {POSTS.map((post) => (
-      <PostComponent {...post} />
+      <PostComponent {...post} key={post.id} />
     ))}
   </View>
 );
@@ -127,11 +131,13 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 
 // Menu component see 
 const MenuComponent = ({ menu, handleSelectClip }: { menu: Menu, handleSelectClip: (s: Clip) => void }) => {
+  // @ts-ignore
+  const { clipsFeatured } = useStore((state: GlobalStore) => state.clipsFeatured);
   if (menu === Menu["seguidos"]) return null
 
   return (
     <>
-      <Clips onSelectClip={handleSelectClip} />
+      <Clips clips={clipsFeatured} onSelectClip={handleSelectClip} />
       <Publicaciones />
     </>
   )
