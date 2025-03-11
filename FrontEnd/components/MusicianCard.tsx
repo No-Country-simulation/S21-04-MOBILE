@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,8 +8,10 @@ import {
   FlatList,
 } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { GlobalStore, useStore } from '../store';
 
 interface MusicianCardProps {
+  id: number;
   imageURL: string;
   name: string;
   username: string;
@@ -18,11 +20,29 @@ interface MusicianCardProps {
 }
 
 const MusicianCard: React.FC<MusicianCardProps> = ({
+  id,
   imageURL,
   username,
   location,
   tags,
 }) => {
+  const { following, addFollowing, removeFollowing } = useStore(s => s as GlobalStore);
+  const [isFollowingUser, setFollowingUser] = useState(following.includes(String(id)));
+
+  React.useEffect(() => {
+    setFollowingUser(following.includes(String(id)))
+  }, [id, following]);
+
+  const handleFollowingUser = () => {
+    addFollowing(String(id))
+    setFollowingUser(!isFollowingUser)
+  };
+
+  const handleUnfollowingUser = () => {
+    removeFollowing(String(id))
+    setFollowingUser(!isFollowingUser)
+  }
+
   return (
     <View style={styles.card}>
       <Image
@@ -30,8 +50,8 @@ const MusicianCard: React.FC<MusicianCardProps> = ({
           imageURL === 'user'
             ? require('../assets/user.png')
             : imageURL === 'user2'
-            ? require('../assets/user-2.jpg')
-            : { uri: imageURL }
+              ? require('../assets/user-2.jpg')
+              : { uri: imageURL }
         }
         style={styles.image}
       />
@@ -53,9 +73,21 @@ const MusicianCard: React.FC<MusicianCardProps> = ({
           showsHorizontalScrollIndicator={false}
           style={styles.genreContainer}
         />
-        <TouchableOpacity style={styles.followButton}>
-          <Text style={styles.followText}>+ Seguir</Text>
-        </TouchableOpacity>
+        {!isFollowingUser ? (
+          /* @ts-ignore */
+          <TouchableOpacity
+            style={styles.followButton}
+            onPress={() => handleFollowingUser()}>
+            <Text style={styles.followText}>+ Seguir</Text>
+          </TouchableOpacity>
+        ) : (
+          /* @ts-ignore */
+          <TouchableOpacity
+            style={styles.followButton}
+            onPress={() => handleUnfollowingUser()}>
+            <Text style={styles.followText}>- Dejar de seguir</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -76,7 +108,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    opacity: 0.75,
     right: 0,
     bottom: 0,
     borderRadius: 12,

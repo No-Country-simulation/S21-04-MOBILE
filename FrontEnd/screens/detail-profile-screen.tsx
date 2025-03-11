@@ -9,7 +9,7 @@ import { Provider } from 'react-native-paper';
 import Clip from '../interfaces/clip-interface';
 
 // Component
-import GradientComponent from '../components/GradientComponent';
+import GradientProfile from '../components/GradientProfile';
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import MenuComponent from '../components/MenuComponent';
 import ModalComponent from '../components/ModalComponent';
@@ -48,7 +48,7 @@ export default function DetailProfileScreen({ route }: { route: any }) {
           />
         )}
         <ScrollView style={styles.scrollView}>
-          <GradientComponent />
+          <GradientProfile />
           <View style={styles.header}>
             <ImagePickerComponent
               disabled={true}

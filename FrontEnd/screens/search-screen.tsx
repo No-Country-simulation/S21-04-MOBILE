@@ -1,8 +1,16 @@
+import GradientComponent from '../components/GradientUsers';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  FlatList, SafeAreaView,
-  ScrollView, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Provider } from 'react-native-paper';
 import ClipsListComponent from '../components/ClipsListComponent';
@@ -67,29 +75,31 @@ const UsuariosDestacados = () => {
   return (
     <View style={{ marginBottom: 10 }}>
       <Title s={'Usuarios destacados'} style={{ marginLeft: 20 }} />
-      <FlatList
-        data={USERS}
-        renderItem={({ item }: { item: any }) => (
-          // @ts-ignore
-          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
-            style={{
-              width: 170,
-              height: 250,
-              borderRadius: 15,
-              marginHorizontal: 4,
-            }}>
-            <MusicianCard {...item} />
-          </TouchableOpacity>
-        )}
-        keyExtractor={(_, index) => String(index)}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{
-          backgroundColor: '#FC1768',
-          height: 270,
-          paddingHorizontal: 4,
-        }}
-      />
+      <View style={{ position: 'relative', height: 270 }}>
+        <GradientComponent />
+        <FlatList
+          data={USERS}
+          renderItem={({ item }: { item: any }) => (
+            // @ts-ignore
+            <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
+              style={{
+                width: 170,
+                height: 250,
+                borderRadius: 15,
+                marginHorizontal: 4,
+              }}>
+              <MusicianCard {...item} />
+            </TouchableOpacity>
+          )}
+          keyExtractor={(_, index) => String(index)}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            height: "100%",
+            paddingHorizontal: 4,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -137,29 +147,32 @@ const UsuariosSugeridos = () => {
         s={'Usuarios que podrían interesarte'}
         style={{ marginLeft: 20 }}
       />
-      <FlatList
-        data={USERS.reverse()}
-        renderItem={({ item }: { item: any }) => (
-          // @ts-ignore
-          <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
-            style={{
-              width: 170,
-              height: 250,
-              borderRadius: 15,
-              marginHorizontal: 4,
-            }}>
-            <MusicianCard {...item} />
-          </TouchableOpacity>
-        )}
-        keyExtractor={(_, index) => String(index)}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{
-          backgroundColor: '#FC1768',
-          height: 270,
-          paddingHorizontal: 4,
-        }}
-      />
+      <View style={{ position: 'relative', height: 270 }}>
+        <GradientComponent />
+        <FlatList
+          data={USERS.reverse()}
+          renderItem={({ item }: { item: any }) => (
+            // @ts-ignore
+            <TouchableOpacity onPress={() => navigation.navigate('Detail', { userId: item.id })}
+              style={{
+                width: 170,
+                height: 250,
+                borderRadius: 15,
+                marginHorizontal: 4,
+              }}>
+              <MusicianCard {...item} />
+            </TouchableOpacity>
+          )}
+          keyExtractor={(_, index) => String(index)}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            backgroundColor: '#FC1768',
+            height: 270,
+            paddingHorizontal: 4,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -197,7 +210,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
     width: '100%',
-    gap: 6,
+    gap: 8,
   },
 
   genreList: {

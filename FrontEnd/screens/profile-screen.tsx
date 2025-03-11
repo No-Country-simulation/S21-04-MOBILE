@@ -4,7 +4,7 @@ import {
   SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Provider } from 'react-native-paper';
-import GradientComponent from "../components/GradientComponent";
+import GradientComponent from "../components/GradientProfile";
 import ImagePickerComponent from '../components/ImagePickerComponent';
 import MenuComponent from '../components/MenuComponent';
 import ModalComponent from '../components/ModalComponent';
