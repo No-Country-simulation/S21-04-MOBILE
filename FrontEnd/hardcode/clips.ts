@@ -42,3 +42,48 @@ export const CLIPS: Clip[] = [
         tags: ["#Clip", "#Guitarra"]
     },
 ];
+
+
+
+export const clipsFeatured = [
+    {
+        videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_1.mp4",
+        imageURL: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        username: "ana_123",
+        name: "Ana García",
+        content: "Me encanta la música y el arte.",
+        tags: ["#Música", "#Arte"]
+    },
+    {
+        videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_2.mp4",
+        imageURL: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        username: "pedro_567",
+        name: "Pedro Ramírez",
+        content: "Descubriendo nuevos sonidos.",
+        tags: ["#Música", "#Innovación"]
+    },
+    {
+        videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_3.mp4",
+        imageURL: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        username: "lucia_91",
+        name: "Lucía Martínez",
+        content: "Los libros son mi pasión.",
+        tags: ["#Libros", "#Lectura"]
+    },
+    {
+        videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_4.mp4",
+        imageURL: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        username: "juanp_99",
+        name: "Juan Pérez",
+        content: "Amante de la naturaleza y las aventuras.",
+        tags: ["#Aventura", "#Naturaleza"]
+    },
+    {
+        videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_5.mp4",
+        imageURL: 'https://images.unsplash.com/photo-1544731612-de7f96afe55f?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        username: "maria_22",
+        name: "María López",
+        content: "Fotógrafa y viajera.",
+        tags: ["#Viajes", "#Fotografía"]
+    }
+];

@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { clipsFeatured } from '../hardcode/clips';
+import Clip from '../interfaces/clip-interface';
 import Post from '../interfaces/post-interface';
 import Profile from '../interfaces/profille-interface';
 
@@ -8,43 +10,26 @@ export interface GlobalStore {
     // publicaciones destacadas
     postsFeatured: Post[]
     // clips destacados
-    clipsFeatured: { videoURL: string }[]
+    clipsFeatured: Clip[]
     // publicaciones de seguidos
-    postsFollowing: Post[]    
+    postsFollowing: Post[]
     // clips de seguidos
-    clipsFollowing: []
+    clipsFollowing: Clip[]
     // usuarios destacados
     usersFeatured: Profile[]
     // usuarios sugeridos
     usersSuggested: Profile[]
     // clips genero rock
-    genreRock: []
+    genreRock: Clip[]
     // clips genero rock
-    genreJazz: []
+    genreJazz: Clip[]
     // clips genero rock
-    genreCover: []
+    genreCover: Clip[]
 }
 
 export const useGlobalStore = create((set) => ({
     profile: null,
-    postsFeatured: [
-        {
-            videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_1.mp4"
-        },
-        {
-            videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_2.mp4"
-        },
-        {
-            videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_3.mp4"
-        },
-        {
-            videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_4.mp4"
-        },
-        {
-            videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_5.mp4"
-        }
-    ], 
-    clips: [],
+    clipsFeatured: clipsFeatured,
 
     setProfile: (profile: Profile) => set({ profile }),
     clearProfile: () => set({ profile: null }),
