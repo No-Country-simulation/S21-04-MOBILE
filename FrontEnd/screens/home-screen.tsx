@@ -132,7 +132,7 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 // Menu component see 
 const MenuComponent = ({ menu, handleSelectClip }: { menu: Menu, handleSelectClip: (s: Clip) => void }) => {
   // @ts-ignore
-  const { clipsFeatured } = useStore((state: GlobalStore) => state.clipsFeatured);
+  const { clipsFeatured } = useStore((state: GlobalStore) => state);
   if (menu === Menu["seguidos"]) return null
 
   return (
