@@ -16,8 +16,10 @@ import ModalComponent from '../components/ModalComponent';
 
 // Hardcode
 import USERS from '../hardcode/users';
+import { useStore, GlobalStore } from '../store';
 
 export default function DetailProfileScreen({ route }: { route: any }) {
+  const { following } = useStore(s => s as GlobalStore);
   const { userId } = route.params;
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
@@ -28,9 +30,6 @@ export default function DetailProfileScreen({ route }: { route: any }) {
     const user = USERS.filter((x) => x.id === userId)[0];
     if (user?.id) {
       setCurrentUser(user);
-      console.log({ user });
-    } else {
-      alert('El usuario no existe');
     }
   }, [userId]);
 
@@ -72,7 +71,7 @@ export default function DetailProfileScreen({ route }: { route: any }) {
               {/* @ts-ignore */}
               <TouchableOpacity style={styles.followButton}>
                 <Text style={styles.followText}>
-                  {currentUser.isFollowing ? '- Dejar de seguir' : '+ Seguir'}
+                  {following.includes(userId) ? '- Dejar de seguir' : '+ Seguir'}
                 </Text>
               </TouchableOpacity>
               {/* @ts-ignore */}

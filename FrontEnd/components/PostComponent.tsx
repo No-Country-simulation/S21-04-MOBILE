@@ -1,13 +1,14 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import PROFILE from '../hardcode/profile';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
-import CommentsModal from './CommentModal';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import COMMENTS from '../hardcode/comments';
+import PROFILE from '../hardcode/profile';
+import { GlobalStore, useStore } from '../store';
+import CommentsModal from './CommentModal';
 
 interface PostProps {
-  id: number,
+  id: number;
   userId?: number;
   name: string;
   time: string;
@@ -15,9 +16,11 @@ interface PostProps {
   content: string;
   hashtags: string[];
   isFollowing?: boolean;
+  liked?: boolean
 }
 
 const PostComponent = ({
+  id,
   userId,
   name,
   time,
@@ -25,13 +28,23 @@ const PostComponent = ({
   isFollowing,
   content,
   hashtags,
+  liked = false
 }: PostProps) => {
+  const { following, addFollowing } = useStore(s => s as GlobalStore);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [postLiked, setLiked] = useState(liked);
+  const [isFollowingUser, setFollowingUser] = useState(following.includes(String(id)));
+  const handleLikePost = (id: number) => { setLiked(!postLiked) };
+  const handleFollowingUser = (id: number) => { addFollowing(String(id)); setFollowingUser(!isFollowingUser) };
 
   return (
     <>
-      <CommentsModal visible={modalVisible} onDismiss={() => setModalVisible(false)} comments={COMMENTS} />
+      <CommentsModal
+        visible={modalVisible}
+        onDismiss={() => setModalVisible(false)}
+        comments={COMMENTS}
+      />
       <View style={styles.container}>
         {/* @ts-ignore */}
         <View style={styles.header}>
@@ -53,11 +66,16 @@ const PostComponent = ({
             <Text style={styles.username}>{name}</Text>
             <Text style={styles.time}>{time}</Text>
           </View>
-          <TouchableOpacity style={styles.followButton}>
-            <Text style={styles.followText}>
-              {isFollowing ? '- Dejar de seguir' : '+ Seguir'}
-            </Text>
-          </TouchableOpacity>
+          {
+            !isFollowingUser && (
+              /* @ts-ignore */
+              <TouchableOpacity style={styles.followButton} onPress={() => handleFollowingUser()}>
+                <Text style={styles.followText}>
+                  + Seguir
+                </Text>
+              </TouchableOpacity>
+            )
+          }
           <FontAwesome name="ellipsis-v" size={14} color="#fff" />
         </View>
 
@@ -68,8 +86,18 @@ const PostComponent = ({
 
         {/* @ts-ignore */}
         <View style={styles.footer}>
-          <FontAwesome name="heart-o" size={16} color="#fff" />
-          <FontAwesome name="comment-o" size={16} color="#fff" />
+
+          {/* @ts-ignore */}
+          <TouchableOpacity onPress={() => handleLikePost(id)}>
+            {
+              postLiked ?
+                <FontAwesome name="heart" size={16} color="#d7044e" /> :
+                <FontAwesome name="heart-o" size={16} color="#fff" />
+            }
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <FontAwesome name="comment-o" size={16} color="#fff" />
+          </TouchableOpacity>
           <FontAwesome name="paper-plane-o" size={16} color="#fff" />
         </View>
       </View>

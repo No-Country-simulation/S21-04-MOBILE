@@ -1,24 +1,17 @@
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
-import SearchBarComponent from '../components/SearchBarComponent';
-import MusicianCard from '../components/MusicianCard';
-import USERS from '../hardcode/users';
 import { useNavigation } from '@react-navigation/native';
-import GenreCard from '../components/GenreCard';
-import Clip from '../interfaces/clip-interface';
+import React from 'react';
+import {
+  FlatList, SafeAreaView,
+  ScrollView, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View
+} from 'react-native';
 import { Provider } from 'react-native-paper';
 import ClipsListComponent from '../components/ClipsListComponent';
-import React from 'react';
+import GenreCard from '../components/GenreCard';
 import ModalComponent from '../components/ModalComponent';
+import MusicianCard from '../components/MusicianCard';
+import SearchBarComponent from '../components/SearchBarComponent';
+import USERS from '../hardcode/users';
+import Clip from '../interfaces/clip-interface';
 
 export default function SearchScreen() {
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
@@ -188,8 +181,8 @@ const ClipsTendencia = ({
       <ClipsListComponent onSelectClip={onSelectClip} />
       <Title s={'#R&B'} style={{ marginLeft: 20 }} />
       <ClipsListComponent onSelectClip={onSelectClip} />
-      <Title s={'#Cover'} style={{ marginLeft: 20 }} />
-      <ClipsListComponent onSelectClip={onSelectClip} />
+      {/* <Title s={'#Cover'} style={{ marginLeft: 20 }} />
+      <ClipsListComponent onSelectClip={onSelectClip} /> */}
     </View>
   );
 };

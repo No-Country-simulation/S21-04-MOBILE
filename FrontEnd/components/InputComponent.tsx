@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 8,
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
 
   textArea: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 10,
     textAlignVertical: "top",
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
   },
 })
 

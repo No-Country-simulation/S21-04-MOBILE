@@ -7,6 +7,10 @@ import Profile from '../interfaces/profille-interface';
 export interface GlobalStore {
     // usuario logueado
     profile: Profile | null
+    // lista de seguidores
+    following: string[]
+    // agregar seguido
+    addFollowing: (id: string) => void
     // publicaciones destacadas
     postsFeatured: Post[]
     // clips destacados
@@ -27,8 +31,18 @@ export interface GlobalStore {
     genreCover: Clip[]
 }
 
-export const useGlobalStore = create((set) => ({
+export const useStore = create((set) => ({
     profile: null,
+
+    following: [],
+    // agregar usuario siguiendo
+    addFollowing: (id: string) =>
+        set((state: GlobalStore) => ({
+            following: state.following.includes(id)
+                ? state.following
+                : [...state.following, id]
+        })),
+
     clipsFeatured: clipsFeatured,
 
     setProfile: (profile: Profile) => set({ profile }),
