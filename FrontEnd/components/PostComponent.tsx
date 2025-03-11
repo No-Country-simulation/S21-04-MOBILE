@@ -1,3 +1,4 @@
+import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -31,7 +32,15 @@ const PostComponent = ({
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const [isFollowingUser, setFollowingUser] = useState(following.includes(String(userId)));
-  const handleFollowingUser = (id: number) => { addFollowing(String(userId)); setFollowingUser(!isFollowingUser) };
+
+  React.useEffect(() => {
+    setFollowingUser(following.includes(String(userId)))
+  }, [userId, following]);
+
+  const handleFollowingUser = () => {
+    addFollowing(String(userId))
+    setFollowingUser(!isFollowingUser)
+  };
 
   return (
     <>
@@ -61,16 +70,14 @@ const PostComponent = ({
             <Text style={styles.username}>{name}</Text>
             <Text style={styles.time}>{time}</Text>
           </View>
-          {
-            !isFollowingUser && (
-              /* @ts-ignore */
-              <TouchableOpacity style={styles.followButton} onPress={() => handleFollowingUser()}>
-                <Text style={styles.followText}>
-                  + Seguir
-                </Text>
-              </TouchableOpacity>
-            )
-          }
+          {!isFollowingUser && (
+            /* @ts-ignore */
+            <TouchableOpacity
+              style={styles.followButton}
+              onPress={() => handleFollowingUser()}>
+              <Text style={styles.followText}>+ Seguir</Text>
+            </TouchableOpacity>
+          )}
           <FontAwesome name="ellipsis-v" size={14} color="#fff" />
         </View>
 
@@ -81,14 +88,13 @@ const PostComponent = ({
 
         {/* @ts-ignore */}
         <View style={styles.footer}>
-
           {/* @ts-ignore */}
           <TouchableOpacity onPress={() => toggleLikePost(String(id))}>
-            {
-              isLiked ?
-                <FontAwesome name="heart" size={16} color="#d7044e" /> :
-                <FontAwesome name="heart-o" size={16} color="#fff" />
-            }
+            {isLiked ? (
+              <FontAwesome name="heart" size={16} color="#d7044e" />
+            ) : (
+              <FontAwesome name="heart-o" size={16} color="#fff" />
+            )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <FontAwesome name="comment-o" size={16} color="#fff" />
