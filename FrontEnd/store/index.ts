@@ -11,6 +11,17 @@ export interface GlobalStore {
     following: string[]
     // agregar seguido
     addFollowing: (id: string) => void
+    // dejar de seguir
+    removeFollowing: (id: string) => void
+    // publicaciones que le gustaron
+    likedPosts: string[]
+    // agregar like o lo quita si ya existe
+    toggleLikePost: (id: string) => void
+    // comentarios que le gustaron
+    likedComments: string[]
+    // 
+    toggleLikeComment: (id: string) => void
+
     // publicaciones destacadas
     postsFeatured: Post[]
     // clips destacados
@@ -33,7 +44,6 @@ export interface GlobalStore {
 
 export const useStore = create((set) => ({
     profile: null,
-
     following: [],
     // agregar usuario siguiendo
     addFollowing: (id: string) =>
@@ -42,6 +52,26 @@ export const useStore = create((set) => ({
                 ? state.following
                 : [...state.following, id]
         })),
+    // dejar de seguir
+    removeFollowing: (id: string) =>
+        set((state: GlobalStore) => ({
+            following: state.following.filter(userId => userId !== id)
+        })),
+    likedPosts: [],
+    toggleLikePost: (id: string) =>
+        set((state: GlobalStore) => ({
+            likedPosts: state.likedPosts.includes(id)
+                ? state.likedPosts.filter((postId) => postId !== id)
+                : [...state.likedPosts, id]
+        })),
+    likedComments: [],
+    toggleLikeComment: (id: string) =>
+        set((state: GlobalStore) => ({
+            likedComments: state.likedComments.includes(id)
+                ? state.likedComments.filter((commentId) => commentId !== id)
+                : [...state.likedComments, id]
+        })),
+
 
     clipsFeatured: clipsFeatured,
 

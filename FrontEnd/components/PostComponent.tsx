@@ -15,8 +15,6 @@ interface PostProps {
   imageURL: string;
   content: string;
   hashtags: string[];
-  isFollowing?: boolean;
-  liked?: boolean
 }
 
 const PostComponent = ({
@@ -25,18 +23,15 @@ const PostComponent = ({
   name,
   time,
   imageURL,
-  isFollowing,
   content,
   hashtags,
-  liked = false
 }: PostProps) => {
-  const { following, addFollowing } = useStore(s => s as GlobalStore);
+  const { following, addFollowing, likedPosts, toggleLikePost } = useStore(s => s as GlobalStore);
+  const isLiked = likedPosts.includes(String(id));
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const [postLiked, setLiked] = useState(liked);
-  const [isFollowingUser, setFollowingUser] = useState(following.includes(String(id)));
-  const handleLikePost = (id: number) => { setLiked(!postLiked) };
-  const handleFollowingUser = (id: number) => { addFollowing(String(id)); setFollowingUser(!isFollowingUser) };
+  const [isFollowingUser, setFollowingUser] = useState(following.includes(String(userId)));
+  const handleFollowingUser = (id: number) => { addFollowing(String(userId)); setFollowingUser(!isFollowingUser) };
 
   return (
     <>
@@ -88,9 +83,9 @@ const PostComponent = ({
         <View style={styles.footer}>
 
           {/* @ts-ignore */}
-          <TouchableOpacity onPress={() => handleLikePost(id)}>
+          <TouchableOpacity onPress={() => toggleLikePost(String(id))}>
             {
-              postLiked ?
+              isLiked ?
                 <FontAwesome name="heart" size={16} color="#d7044e" /> :
                 <FontAwesome name="heart-o" size={16} color="#fff" />
             }

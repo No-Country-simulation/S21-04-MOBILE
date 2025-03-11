@@ -19,10 +19,12 @@ import USERS from '../hardcode/users';
 import { useStore, GlobalStore } from '../store';
 
 export default function DetailProfileScreen({ route }: { route: any }) {
-  const { following } = useStore(s => s as GlobalStore);
+  const { following, addFollowing, removeFollowing } = useStore(s => s as GlobalStore);
   const { userId } = route.params;
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+
+  const isFollowing = following.includes(String(userId));
 
   const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
 
@@ -69,9 +71,12 @@ export default function DetailProfileScreen({ route }: { route: any }) {
             </Text>
             <View style={styles.actions}>
               {/* @ts-ignore */}
-              <TouchableOpacity style={styles.followButton}>
+              <TouchableOpacity 
+                style={styles.followButton} 
+                onPress={() => (isFollowing ? removeFollowing(String(userId)) : addFollowing(String(userId)))}
+              >
                 <Text style={styles.followText}>
-                  {following.includes(userId) ? '- Dejar de seguir' : '+ Seguir'}
+                  {isFollowing ? '- Dejar de seguir' : '+ Seguir'}
                 </Text>
               </TouchableOpacity>
               {/* @ts-ignore */}

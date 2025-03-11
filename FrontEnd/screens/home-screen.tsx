@@ -4,7 +4,7 @@ import {
   ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import { Provider } from 'react-native-paper';
-import { useStore } from 'zustand';
+// import { useStore } from 'zustand';
 
 // Components
 import ClipsListComponent from '../components/ClipsListComponent';
@@ -16,7 +16,7 @@ import { POSTS } from "../hardcode/posts";
 
 // Interfaces
 import Clip from '../interfaces/clip-interface';
-import { GlobalStore } from '../store';
+import { GlobalStore, useStore } from '../store';
 
 enum Menu {
   "tendencias",
