@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Portal, Modal } from 'react-native-paper';
-import { Clip } from '../hardcode/clips';
+import Clip from '../interfaces/clip-interface';
 import ClipFullScreen from './ClipFullScreen';
 
 export default function ModalComponent({

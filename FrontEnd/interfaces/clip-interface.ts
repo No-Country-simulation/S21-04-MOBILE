@@ -1,4 +1,5 @@
 export default interface Clip {
+    id: string,
     videoURL: string,
     imageURL: string,
     username: string,

@@ -1,16 +1,18 @@
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { FontAwesome } from "@expo/vector-icons";
 import VideoComponent from './VideoComponent';
 import Clip from '../interfaces/clip-interface';
 import COMMENTS from '../hardcode/comments';
 import CommentsModal from './CommentModal';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { GlobalStore, useStore } from '../store';
 
 interface ClipFullScreenProps extends Clip {
     fullScreen: boolean;
 }
 
 export default function ClipFullScreen({
+    id,
     videoURL,
     name,
     username,
@@ -19,6 +21,9 @@ export default function ClipFullScreen({
     fullScreen,
 }: ClipFullScreenProps) {
     const [modalVisible, setModalVisible] = useState(false);
+    const { likedClips, toggleLikeClip } = useStore(s => s as GlobalStore);
+    const isLiked = likedClips.includes(String(id));
+
     return (
         <>
             <CommentsModal visible={modalVisible} onDismiss={() => setModalVisible(false)} comments={COMMENTS} />
@@ -49,8 +54,19 @@ export default function ClipFullScreen({
                     </Text>
                 </View>
                 <View style={{ position: "absolute", bottom: 150, gap: 16, right: 0, paddingHorizontal: 15 }}>
-                    <FontAwesome name="heart-o" size={26} color="#fff" />
-                    <FontAwesome name="comment-o" size={26} color="#fff" />
+
+                    {/* @ts-ignore */}
+                    <TouchableOpacity onPress={() => toggleLikeClip(String(id))}>
+                        {
+                            isLiked ?
+                                <FontAwesome name="heart" size={16} color="#d7044e" /> :
+                                <FontAwesome name="heart-o" size={16} color="#fff" />
+                        }
+                    </TouchableOpacity>
+                    {/* @ts-ignore */}
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <FontAwesome name="comment-o" size={26} color="#fff" />
+                    </TouchableOpacity>
                     <FontAwesome name="paper-plane-o" size={26} color="#fff" />
                 </View>
             </View>
