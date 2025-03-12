@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { clipsFeatured } from '../hardcode/clips';
+import { IDEAS } from "../hardcode/ideas";
 import Clip from '../interfaces/clip-interface';
 import Post from '../interfaces/post-interface';
 import Profile from '../interfaces/profille-interface';
+import Idea from '../interfaces/idea-interface';
 
 export interface GlobalStore {
     // usuario logueado
@@ -25,7 +27,10 @@ export interface GlobalStore {
     likedClips: string[]
     // agregar like o lo quita si ya existe comentario
     toggleLikeClip: (id: string) => void
-
+    // ideas
+    ideas: Idea[]
+    // agregar idea
+    addIdea: (idea: Idea) => void
     // publicaciones destacadas
     postsFeatured: Post[]
     // clips destacados
@@ -82,6 +87,13 @@ export const useStore = create((set) => ({
                 ? state.likedClips.filter((clipId) => clipId !== id)
                 : [...state.likedClips, id]
         })),
+    ideas: IDEAS,
+    addIdea: (idea: Idea) =>
+        set((state: GlobalStore) => ({
+            ideas: [...state.ideas, idea]
+        })),
+
+
     clipsFeatured: clipsFeatured,
 
     setProfile: (profile: Profile) => set({ profile }),
