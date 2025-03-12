@@ -1,19 +1,19 @@
-const PROFILE = {
-  name: 'User Test',
-  username: 'user_test',
-  bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam faucibus velit ante, eu facilisis nunc interdum non. Vestibulum dictum augue tortor, in elementum felis mollis euismod. Nulla bibendum fringilla lectus et pulvinar.',
-  imageURL:
-    'https://images.unsplash.com/photo-1593697972672-b1c1902219e4?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+export const PROFILE = {
+  id: 1,
+  name: 'Pablo Cuello',
+  username: 'pablocuello',
+  bio: 'Soy un guitarrista apasionado que vive por los escenarios y las melodías. Mi estilo combina ritmos clásicos y modernos para crear experiencias únicas.',
+  imageURL: 'https://storage.googleapis.com/nc-s21-04/user-2.jpg',
   location: 'Buenos Aires, Argentina',
-  tags: ['Guitarrista', 'Productor/a', 'Beatmaker'],
-  followers: 930,
+  tags: ['Guitarrista', 'Compositor/a'],
+  followers: 500,
   following: 15,
   links: [
-    { name: 'Spotify', url: '' },
-    { name: 'Sitio Web', url: '' },
-    { name: 'Youtube', url: '' },
-    { name: 'Instagram', url: '' },
-    { name: 'Tiktok', url: '' },
+    { name: 'Spotify', url: 'https://spotify.com' },
+    { name: 'Sitio Web', url: 'https://google.com' },
+    { name: 'Youtube', url: 'https://youtube.com' },
+    { name: 'Instagram', url: 'https://instagram.com' },
+    { name: 'Tiktok', url: 'https://tiktok.com' },
   ],
   posts: [
     {
@@ -96,5 +96,3 @@ const PROFILE = {
     },
   ]
 };
-
-export default PROFILE;

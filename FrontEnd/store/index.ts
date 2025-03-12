@@ -5,10 +5,11 @@ import Clip from '../interfaces/clip-interface';
 import Post from '../interfaces/post-interface';
 import Profile from '../interfaces/profille-interface';
 import Idea from '../interfaces/idea-interface';
+import { PROFILE } from '../hardcode/profile';
 
 export interface GlobalStore {
     // usuario logueado
-    profile: Profile | null
+    profile: Profile
     // lista de seguidores
     following: string[]
     // agregar seguido
@@ -52,7 +53,7 @@ export interface GlobalStore {
 }
 
 export const useStore = create((set) => ({
-    profile: null,
+    profile: PROFILE,
     following: [],
     // agregar usuario siguiendo
     addFollowing: (id: string) =>
