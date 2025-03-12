@@ -16,7 +16,17 @@ const CommentItem = ({ comment }: { comment: any }) => {
   const { likedComments, toggleLikeComment } = useStore(
     (s) => s as GlobalStore
   );
+  const [nroLike, setNroLike] = useState(comment.likes);
   const isLiked = likedComments.includes(String(comment.id));
+
+  const handleLike = () => {
+    toggleLikeComment(String(comment.id));
+    if (isLiked) {
+      setNroLike(nroLike - 1)
+    } else {
+      setNroLike(nroLike + 1)
+    }
+  }
 
   return (
     <View style={styles.commentItem}>
@@ -30,10 +40,10 @@ const CommentItem = ({ comment }: { comment: any }) => {
           <TouchableOpacity>
             <Text style={styles.action}>Responder</Text>
           </TouchableOpacity>
-          <Text style={styles.likes}>{comment.likes} me gusta</Text>
+          <Text style={styles.likes}>{nroLike} me gusta</Text>
           {/*@ts-ignore */}
           <TouchableOpacity
-            onPress={() => toggleLikeComment(String(comment.id))}
+            onPress={() => handleLike()}
             style={{ marginHorizontal: 4 }}>
             {isLiked ? (
               <FontAwesome name="heart" size={16} color="#d7044e" />
@@ -47,26 +57,42 @@ const CommentItem = ({ comment }: { comment: any }) => {
   );
 };
 
-const CommentInput = () => (
-  <View style={styles.inputContainer}>
-    <TextInput
-      style={styles.input}
-      placeholder="Escribe aquí"
-      placeholderTextColor="#aaa"
-    />
-    <IconButton icon="send" size={20} iconColor="white" />
-  </View>
-);
+const CommentInput = ({ id }: { id: string | number }) => {
+  const { addCommentToClip, profile } = useStore(s => s as GlobalStore);
+  const [text, setText] = useState("");
+  const handleSubmit = () =>
+    addCommentToClip(String(id), {
+      username: profile.name,
+      text: text,
+      avatar: profile.imageURL
+    });
+
+  return (
+    <View style={styles.inputContainer}>
+      <TextInput
+        style={styles.input}
+        placeholder="Escribe aquí"
+        placeholderTextColor="#aaa"
+        onChangeText={setText}
+        value={text}
+      />
+      <IconButton onPress={() => handleSubmit()} icon="send" size={20} iconColor="white" />
+    </View>
+  )
+};
 
 const CommentsModal = ({
+  id,
   visible,
   onDismiss,
   comments,
 }: {
+  id: number | string;
   visible: boolean;
   onDismiss: () => void;
   comments: any[];
 }) => {
+  React.useEffect(() => { console.log(comments) }, [comments])
   return (
     // @ts-ignore
     <Portal style={{ position: 'relative' }}>
@@ -88,7 +114,7 @@ const CommentsModal = ({
           renderItem={({ item }) => <CommentItem comment={item} />}
           keyExtractor={(item) => item.id.toString()}
         />
-        <CommentInput />
+        <CommentInput id={id} />
       </Modal>
     </Portal>
   );

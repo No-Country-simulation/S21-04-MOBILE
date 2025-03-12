@@ -23,6 +23,7 @@ export default function DetailProfileScreen({ route }: { route: any }) {
   const { userId } = route.params;
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+  const [followers, setFollowers] = useState(currentUser.followers);
 
   const isFollowing = following.includes(String(userId));
 
@@ -34,6 +35,16 @@ export default function DetailProfileScreen({ route }: { route: any }) {
       setCurrentUser(user);
     }
   }, [userId]);
+
+  const handleFollow = () => {
+    if (isFollowing) {
+      removeFollowing(String(userId))
+      setFollowers(followers - 1)
+    } else {
+      addFollowing(String(userId))
+      setFollowers(followers + 1)
+    }
+  }
 
   if (!currentUser) return null;
 
@@ -66,14 +77,14 @@ export default function DetailProfileScreen({ route }: { route: any }) {
             <Bio bio={currentUser.bio} />
             <Tags tags={currentUser.tags} />
             <Text style={styles.follow}>
-              {currentUser.followers} Seguidores • {currentUser.following}{' '}
+              {followers} Seguidores • {currentUser.following}{' '}
               Siguiendo
             </Text>
             <View style={styles.actions}>
               {/* @ts-ignore */}
-              <TouchableOpacity 
-                style={styles.followButton} 
-                onPress={() => (isFollowing ? removeFollowing(String(userId)) : addFollowing(String(userId)))}
+              <TouchableOpacity
+                style={styles.followButton}
+                onPress={() => handleFollow()}
               >
                 <Text style={styles.followText}>
                   {isFollowing ? '- Dejar de seguir' : '+ Seguir'}

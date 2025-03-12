@@ -1,6 +1,6 @@
 import Clip from "../interfaces/clip-interface";
 
-export const CLIPS: Clip[] = [
+export const CLIPS = [
     {
         id: "1",
         videoURL: 'https://storage.googleapis.com/roomies-2096e.appspot.com/6273835-uhd_2160_3840_30fps.mp4',
@@ -48,7 +48,7 @@ export const CLIPS: Clip[] = [
     },
 ];
 
-export const clipsFeatured = [
+export const clipsFeatured:  Clip[] = [
     {
         id: "1",
         videoURL: "https://storage.googleapis.com/nc-s21-04/clip_destacado_1.mp4",
@@ -61,9 +61,9 @@ export const clipsFeatured = [
             {
                 id: 1,
                 username: "Mariana Lou",
-                text: "Me encanta! Gracias por compartir.",
+                text: "Me encanta! Gracias por compartir Ana.",
                 time: "5h",
-                likes: 11,
+                likes: 2,
                 avatar: "https://randomuser.me/api/portraits/women/1.jpg"
             },
             {
@@ -71,16 +71,8 @@ export const clipsFeatured = [
                 username: "Ignacio Siena",
                 text: "Qué energía en este videoclip! 🔥",
                 time: "5h",
-                likes: 8,
+                likes: 1,
                 avatar: "https://randomuser.me/api/portraits/men/2.jpg"
-            },
-            {
-                id: 3,
-                username: "Ramón Son",
-                text: "La estética me encanta!",
-                time: "5h",
-                likes: 5,
-                avatar: "https://randomuser.me/api/portraits/men/3.jpg"
             }
         ]
     },
@@ -91,7 +83,25 @@ export const clipsFeatured = [
         username: "pedroramirez",
         name: "Pedro Ramírez",
         content: "Descubriendo nuevos sonidos.",
-        tags: ["#Improvisacion", "#Clip"]
+        tags: ["#Improvisacion", "#Clip"],
+        comments: [
+            {
+                id: 1,
+                username: "Mariana Lou",
+                text: "Me encanta! Gracias por compartir Pedro.",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/women/1.jpg"
+            },
+            {
+                id: 2,
+                username: "Ignacio Siena",
+                text: "Qué energía en este videoclip! 🔥",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/men/2.jpg"
+            }
+        ]
     },
     {
         id: "3",
@@ -100,7 +110,25 @@ export const clipsFeatured = [
         username: "martinezlucia",
         name: "Lucía Martínez",
         content: "",
-        tags: ["#Clip"]
+        tags: ["#Clip"],
+        comments: [
+            {
+                id: 1,
+                username: "Mariana Lou",
+                text: "Me encanta! Gracias por compartir Pedro.",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/women/1.jpg"
+            },
+            {
+                id: 2,
+                username: "Ignacio Siena",
+                text: "Qué energía en este videoclip! 🔥",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/men/2.jpg"
+            }
+        ]
     },
     {
         id: "4",
@@ -109,7 +137,25 @@ export const clipsFeatured = [
         username: "juan_p",
         name: "Juan Pérez",
         content: "Comparto mi experiencia en mi último show",
-        tags: ["#Single", "#Show", "#Clip"]
+        tags: ["#Single", "#Show", "#Clip"],
+        comments: [
+            {
+                id: 1,
+                username: "Mariana Lou",
+                text: "Me encanta! Gracias por compartir Pedro.",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/women/1.jpg"
+            },
+            {
+                id: 2,
+                username: "Ignacio Siena",
+                text: "Qué energía en este videoclip! 🔥",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/men/2.jpg"
+            }
+        ]
     },
     {
         id: "5",
@@ -118,6 +164,24 @@ export const clipsFeatured = [
         username: "marialopez",
         name: "María López",
         content: "Música y viajes.",
-        tags: []
+        tags: [],
+        comments: [
+            {
+                id: 1,
+                username: "Mariana Lou",
+                text: "Me encanta! Gracias por compartir Pedro.",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/women/1.jpg"
+            },
+            {
+                id: 2,
+                username: "Ignacio Siena",
+                text: "Qué energía en este videoclip! 🔥",
+                time: "5h",
+                likes: 2,
+                avatar: "https://randomuser.me/api/portraits/men/2.jpg"
+            }
+        ]
     }
 ];

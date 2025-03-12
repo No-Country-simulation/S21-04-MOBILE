@@ -50,6 +50,8 @@ export interface GlobalStore {
     genreJazz: Clip[]
     // clips genero rock
     genreCover: Clip[]
+
+    addCommentToClip: (clipId: string, comment: { username: string, text: string, avatar: string }) => void
 }
 
 export const useStore = create((set) => ({
@@ -96,6 +98,26 @@ export const useStore = create((set) => ({
 
 
     clipsFeatured: clipsFeatured,
+
+    addCommentToClip: (clipId: string, comment: { username: string, text: string, avatar: string }) =>
+        set((state: GlobalStore) => ({
+            clipsFeatured: state.clipsFeatured.map(clip =>
+                clip.id === clipId
+                    ? {
+                        ...clip,
+                        comments: [
+                            ...clip.comments,
+                            {
+                                id: clip.comments.length + 1,
+                                ...comment,
+                                time: "Justo ahora",
+                                likes: 0
+                            }
+                        ]
+                    }
+                    : clip
+            )
+        })),
 
     setProfile: (profile: Profile) => set({ profile }),
     clearProfile: () => set({ profile: null }),
