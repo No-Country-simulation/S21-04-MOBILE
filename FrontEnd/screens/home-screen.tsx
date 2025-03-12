@@ -92,7 +92,7 @@ const Clips = ({
 // Section Publicaciones in Tab Tendencias
 const Publicaciones = () => (
   <View style={{ marginVertical: 15 }}>
-    <Text style={{ fontSize: 18, fontWeight: '700', color: 'white' }}>
+    <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
       Últimas Publicaciones
     </Text>
     {POSTS.map((post) => (

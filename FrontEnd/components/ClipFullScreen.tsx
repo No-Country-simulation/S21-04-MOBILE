@@ -50,17 +50,17 @@ export default function ClipFullScreen({
                         {content}
                     </Text>
                     <Text style={{ fontSize: 12, fontWeight: 800, color: 'white' }}>
-                        {JSON.stringify(tags)}
+                        {tags?.join(" ")}
                     </Text>
                 </View>
-                <View style={{ position: "absolute", bottom: 150, gap: 16, right: 0, paddingHorizontal: 15 }}>
+                <View style={{ position: "absolute", bottom: 150, gap: 20, right: 0, paddingHorizontal: 15 }}>
 
                     {/* @ts-ignore */}
                     <TouchableOpacity onPress={() => toggleLikeClip(String(id))}>
                         {
                             isLiked ?
-                                <FontAwesome name="heart" size={16} color="#d7044e" /> :
-                                <FontAwesome name="heart-o" size={16} color="#fff" />
+                                <FontAwesome name="heart" size={26} color="#d7044e" /> :
+                                <FontAwesome name="heart-o" size={26} color="#fff" />
                         }
                     </TouchableOpacity>
                     {/* @ts-ignore */}
