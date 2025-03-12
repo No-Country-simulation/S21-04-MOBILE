@@ -5,5 +5,6 @@ export default interface Clip {
     username: string,
     name: string,
     content?: string,
-    tags?: string[]
+    tags?: string[],
+    comments: any[]
 }

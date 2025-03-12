@@ -19,6 +19,7 @@ export default function ClipFullScreen({
     content,
     tags,
     fullScreen,
+    comments = COMMENTS
 }: ClipFullScreenProps) {
     const [modalVisible, setModalVisible] = useState(false);
     const { likedClips, toggleLikeClip } = useStore(s => s as GlobalStore);
@@ -26,7 +27,7 @@ export default function ClipFullScreen({
 
     return (
         <>
-            <CommentsModal visible={modalVisible} onDismiss={() => setModalVisible(false)} comments={COMMENTS} />
+            <CommentsModal visible={modalVisible} onDismiss={() => setModalVisible(false)} comments={comments} />
             <View style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <VideoComponent videoSource={videoURL} fullScreen={fullScreen} />
                 <View
