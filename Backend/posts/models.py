@@ -37,6 +37,7 @@ class Sample(models.Model):
 
 class Idea(models.Model):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name='idea')
+    title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
