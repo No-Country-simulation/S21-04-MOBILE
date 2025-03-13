@@ -1,134 +1,308 @@
+import { Entypo, FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
+  SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
+import { Provider } from 'react-native-paper';
+
+// Interface
+import Clip from '../interfaces/clip-interface';
+
+// Component
+import GradientProfile from '../components/GradientProfile';
 import ImagePickerComponent from '../components/ImagePickerComponent';
-import InputComponent from '../components/InputComponent';
-import TagsComponent from "../components/TagsComponent";
-import PROFILE from '../hardcode/profile';
+import MenuComponent from '../components/MenuComponent';
+import ModalComponent from '../components/ModalComponent';
 
-export default function EditProfile() {
+// Hardcode
+import USERS from '../hardcode/users';
+import { useStore, GlobalStore } from '../store';
+
+export default function DetailProfileScreen({ route }: { route: any }) {
+  const { following, addFollowing, removeFollowing } = useStore(s => s as GlobalStore);
+  const { userId } = route.params;
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
+  const [followers, setFollowers] = useState<number>();
+
+  const isFollowing = following.includes(String(userId));
+
+  const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
+
+  useEffect(() => {
+    const user = USERS.filter((x) => x.id === userId)[0];
+    if (user?.id) {
+      setCurrentUser(user);
+      setFollowers(user.followers)
+    }
+  }, [userId]);
+
+  const handleFollow = () => {
+    if (isFollowing) {
+      removeFollowing(String(userId))
+      setFollowers(followers - 1)
+    } else {
+      addFollowing(String(userId))
+      setFollowers(followers + 1)
+    }
+  }
+
+  if (!currentUser) return null;
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView
-            contentContainerStyle={styles.scrollView}
-            keyboardShouldPersistTaps="handled">
-            <View style={{ margin: 20 }}></View>
-            <ImagePickerComponent uri={PROFILE.imageURL} />
-
-            <InputComponent
-              label="Nombre"
-              placeholder="Ingrese su nombre"
-              defaultValue={PROFILE.name}
+    <Provider>
+      <SafeAreaView style={styles.safeArea}>
+        {selectedClip && (
+          <ModalComponent
+            visible={!!selectedClip}
+            closeModal={() => handleSelectClip(null)}
+            selectedClip={selectedClip}
+          />
+        )}
+        <ScrollView style={styles.scrollView}>
+          <GradientProfile />
+          <View style={styles.header}>
+            <ImagePickerComponent
+              disabled={true}
+              uri={currentUser.imageURL}
+              size="large"
             />
-            <InputComponent
-              label="Nombre de usuario"
-              placeholder="Ingrese su usuario"
-              defaultValue={PROFILE.username}
-            />
-            <InputComponent
-              label="Ubicación"
-              placeholder="Ingrese ciudad, provincia y país"
-              defaultValue={PROFILE.location}
-            />
-            <InputComponent
-              label="Sitio web"
-              placeholder="URL del sitio web"
-              defaultValue={
-                PROFILE.links.filter(x => x.name === "Sitio Web")[0]?.url ?
-                  PROFILE.links.filter(x => x.name === "Sitio Web")[0].url
-                  : ""
-              }
-            />
-            <InputComponent
-              label="Spotify"
-              placeholder="Ingrese usuario de spotify"
-              defaultValue={
-                PROFILE.links.filter(x => x.name === "Spotify")[0]?.url ?
-                  PROFILE.links.filter(x => x.name === "Spotify")[0].url
-                  : ""
-              }
-            />
-
-            <InputComponent
-              label="Youtube"
-              placeholder="Ingrese usuario de youtube"
-              defaultValue={
-                PROFILE.links.filter(x => x.name === "Youtube")[0]?.url ?
-                  PROFILE.links.filter(x => x.name === "Youtube")[0].url
-                  : ""
-              }
-            />
-            <InputComponent
-              label="Instagram"
-              placeholder="Ingrese usuario de instagram"
-              defaultValue={
-                PROFILE.links.filter(x => x.name === "Instagram")[0]?.url ?
-                  PROFILE.links.filter(x => x.name === "Instagram")[0].url
-                  : ""
-              }
-            />
-            <InputComponent
-              label="Tiktok"
-              placeholder="Ingrese usuario de tiktok"
-              defaultValue={
-                PROFILE.links.filter(x => x.name === "Tiktok")[0]?.url ?
-                  PROFILE.links.filter(x => x.name === "Tiktok")[0].url
-                  : ""
-              }
-            />
-            <InputComponent
-              label="Bio"
-              multiline={true}
-              placeholder="Hablale a los demás usuarios sobre vos"
-              defaultValue={PROFILE.bio}
-            />
-            <View style={styles.containerInput}>
-              <Text style={styles.label}>Tags</Text>
-              <TagsComponent />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View>
+                <Name name={currentUser.name} />
+                <Username username={currentUser.username} />
+              </View>
+              <Location location={currentUser.location} />
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            <Bio bio={currentUser.bio} />
+            <Tags tags={currentUser.tags} />
+            <Text style={styles.follow}>
+              {followers} Seguidores • {currentUser.following}{' '}
+              Siguiendo
+            </Text>
+            <View style={styles.actions}>
+              {/* @ts-ignore */}
+              <TouchableOpacity
+                style={styles.followButton}
+                onPress={() => handleFollow()}
+              >
+                <Text style={styles.followText}>
+                  {isFollowing ? '- Dejar de seguir' : '+ Seguir'}
+                </Text>
+              </TouchableOpacity>
+              {/* @ts-ignore */}
+              <TouchableOpacity style={styles.button} onPress={() => null}>
+                <FontAwesome name="comment-o" size={16} color="#fff" />
+              </TouchableOpacity>
+              {/* @ts-ignore */}
+              <TouchableOpacity style={styles.button} onPress={() => null}>
+                <FontAwesome size={16} color="white" name="share" />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.links}>
+            <Text style={styles.titleLink}>También estoy en</Text>
+            <View style={styles.containerLinks}>
+              {[
+                { label: 'Spotify', selected: false },
+                { label: 'Youtube', selected: false },
+                { label: 'Instagram', selected: false },
+              ].map((tag, index) => (
+                <TagComponent
+                  selected={tag.selected}
+                  label={tag.label}
+                  key={index}
+                />
+              ))}
+            </View>
+          </View>
+          <MenuComponent handleSelectClip={handleSelectClip} POSTS={currentUser.posts} CLIPS={currentUser.clips} />
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
+const Name = ({ name }: { name: string }) => (
+  <Text style={styles.name}>{name}</Text>
+);
+
+const Username = ({ username }: { username: string }) => (
+  <Text style={styles.username}>@{username}</Text>
+);
+
+const Location = ({ location }: { location: string }) => (
+  <TagComponent
+    selected={false}
+    label={location}
+    icon="location-pin"
+    iconColor={'black'}
+    iconSize={16}
+    style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 2,
+    }}
+  />
+);
+
+const TagComponent = ({
+  selected,
+  label,
+  // size = 'medium',
+  style,
+  icon,
+  iconSize,
+  iconColor,
+}: any) => (
+  /* @ts-ignore */
+  < TouchableOpacity activeOpacity={0.7} >
+    <View style={[styles.tag, selected && styles.tagSelected, style]}>
+      {icon && <Entypo name={icon} size={iconSize} color={iconColor} />}
+      <Text style={[styles.tagText, selected && styles.tagTextSelected]}>
+        {label}
+      </Text>
+    </View>
+  </TouchableOpacity >
+);
+
+const Bio = ({ bio }: { bio: string }) => (
+  <Text style={styles.bio}>´{bio}</Text>
+);
+
+const Tags = ({ tags }: { tags: string[] }) => (
+  <View style={styles.tags}>
+    {tags.map((tag, index) => (
+      <TagComponent selected={false} label={tag} key={index} />
+    ))}
+  </View>
+);
+
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1
-  },
-
-  keyboardAvoidingView: {
     flex: 1,
+    width: '100%',
+    backgroundColor: '#222222',
   },
 
   scrollView: {
     flexGrow: 1,
     width: '100%',
-    padding: 10,
-    alignItems: 'center',
   },
 
-  containerInput: {
-    padding: 10,
+  gradient: {
+    width: '100%',
+    position: 'absolute',
+    height: 300,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+
+  header: {
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+
+  name: {
+    color: 'white',
+    fontWeight: 700,
+    fontSize: 18,
+    marginTop: 5,
+  },
+
+  username: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 400,
+  },
+
+  bio: {
+    color: 'white',
+    fontWeight: 400,
+    fontSize: 12,
+    marginTop: 5,
+  },
+
+  tags: {
+    width: '100%',
+    marginTop: 10,
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    justifyContent: 'flex-start',
+  },
+
+  follow: {
+    color: 'white',
+    fontWeight: 400,
+    fontSize: 12,
+    paddingTop: 5,
+  },
+
+  actions: {
     gap: 4,
+    marginTop: 10,
+    flexDirection: 'row',
   },
 
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 4,
+  button: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+
+  links: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+
+  titleLink: {
+    fontSize: 18,
+    fontWeight: 600,
+    color: 'white',
+  },
+
+  containerLinks: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 10,
+  },
+
+  tag: {
+    borderRadius: 20,
+    backgroundColor: '#ddd',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+
+  tagSelected: {
+    backgroundColor: '#3498db',
+  },
+
+  tagText: {
+    color: '#333',
+    fontSize: 12,
+  },
+
+  tagTextSelected: {
+    color: '#fff',
+  },
+
+  followButton: {
+    backgroundColor: '#333',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+
+  followText: {
+    color: '#fff',
+    fontSize: 12,
   },
 });

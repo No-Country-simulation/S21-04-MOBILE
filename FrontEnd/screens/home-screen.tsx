@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Image, SafeAreaView,
-  ScrollView, StyleSheet, Text, TouchableOpacity, View
+  ScrollView, StyleSheet, Text, TouchableOpacity, View, FlatList
 } from 'react-native';
 import { Provider } from 'react-native-paper';
 // import { useStore } from 'zustand';
@@ -16,6 +16,7 @@ import { POSTS } from "../hardcode/posts";
 
 // Interfaces
 import Clip from '../interfaces/clip-interface';
+import Post from '../interfaces/post-interface';
 import { GlobalStore, useStore } from '../store';
 
 enum Menu {
@@ -90,14 +91,18 @@ const Clips = ({
 );
 
 // Section Publicaciones in Tab Tendencias
-const Publicaciones = () => (
+const Publicaciones = ({ posts }: { posts: Post[] }) => (
   <View style={{ marginVertical: 15 }}>
     <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
       Últimas Publicaciones
     </Text>
-    {POSTS.map((post) => (
-      <PostComponent {...post} key={post.id} />
-    ))}
+    <FlatList
+      data={posts}
+      renderItem={({ item }: { item: Post }) => <PostComponent {...item} />}
+      keyExtractor={(_: Post, index: number) => String(index)}
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}
+    />
   </View>
 );
 
@@ -132,13 +137,18 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 // Menu component see 
 const MenuComponent = ({ menu, handleSelectClip }: { menu: Menu, handleSelectClip: (s: Clip) => void }) => {
   // @ts-ignore
-  const { clipsFeatured } = useStore((state: GlobalStore) => state);
-  if (menu === Menu["seguidos"]) return null
+  const { clipsFeatured, clipsFollowing, postsFollowing, postsFeatured } = useStore((state: GlobalStore) => state);
+  if (menu === Menu["seguidos"]) return (
+    <>
+      <Clips clips={clipsFollowing} onSelectClip={handleSelectClip} />
+      <Publicaciones posts={postsFollowing} />
+    </>
+  )
 
   return (
     <>
       <Clips clips={clipsFeatured} onSelectClip={handleSelectClip} />
-      <Publicaciones />
+      <Publicaciones posts={postsFeatured} />
     </>
   )
 }

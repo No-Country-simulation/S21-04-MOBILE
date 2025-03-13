@@ -12,25 +12,23 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import GradientComponent from '../components/GradientProfile';
-
-const ideas = [
-  { id: '1', date: '04/24', title: 'intro electrónica fo' },
-  { id: '2', date: '11/24', title: 'de camino al parqu' },
-  { id: '3', date: '07/24', title: 'sin título' },
-  { id: '4', date: '12/23', title: 'base para el tema d' },
-];
+import { GlobalStore, useStore } from '../store';
+import { uploadAudio } from '../services/media';
 
 const IdeasScreen = () => {
   const [menu, setMenu] = React.useState('list');
+  const [entity, setEntity] = React.useState();
 
   const handleMenu = (m: string) => setMenu(m);
+  const handleEntity = (e: any) => setEntity(e);
 
-  if (menu === 'list') return <ListIdeas handleMenu={handleMenu} />;
+  if (menu === 'list') return <ListIdeas handleMenu={handleMenu} handleEntity={handleEntity} />;
 
-  return <CreateOrEditIdea handleMenu={handleMenu} />;
+  return <CreateOrEditIdea handleMenu={handleMenu} entity={entity} handleEntity={handleEntity} />;
 };
 
-const ListIdeas = ({ handleMenu }: { handleMenu: (m: string) => void }) => {
+const ListIdeas = ({ handleMenu, handleEntity }: { handleMenu: (m: string) => void, handleEntity: (e: any) => void }) => {
+  const { ideas } = useStore(s => s as GlobalStore);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
@@ -61,13 +59,13 @@ const ListIdeas = ({ handleMenu }: { handleMenu: (m: string) => void }) => {
 
           <FlatList
             data={ideas}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
               <View style={styles.ideaItem}>
                 <Ionicons name="musical-note" size={20} color="white" />
                 <Text style={styles.ideaDate}>{item.date}</Text>
                 <Text style={styles.ideaTitle}>{item.title}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => { handleEntity(item); handleMenu("create") }}>
                   <Ionicons name="create" size={20} color="white" />
                 </TouchableOpacity>
               </View>
@@ -81,15 +79,23 @@ const ListIdeas = ({ handleMenu }: { handleMenu: (m: string) => void }) => {
 
 const CreateOrEditIdea = ({
   handleMenu,
+  entity,
+  handleEntity
 }: {
+  entity: any
   handleMenu: (m: string) => void;
+  handleEntity: (e: any) => void
 }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [reference, setReference] = useState('');
-  const [recording, setRecording] = useState(null);
-  const [audio, setAudio] = useState(null);
-  const [audioDuration, setAudioDuration] = useState('00:00');
+  const { addIdea } = useStore(s => s as GlobalStore);
+  const [title, setTitle] = useState(entity?.title ?? '');
+  const [description, setDescription] = useState(entity?.description ?? '');
+  const [reference, setReference] = useState(entity?.reference ?? '');
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [audio, setAudio] = useState<Audio.Sound | null>(null);
+  const [recordingTime, setRecordingTime] = useState(entity?.duration ?? 0);
+  const [uri, setUri] = useState();
+
+  const intervalRef = React.useRef(null);
 
   async function startRecording() {
     try {
@@ -99,10 +105,23 @@ const CreateOrEditIdea = ({
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true,
         });
+
         const { recording } = await Audio.Recording.createAsync(
+          // @ts-ignore
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
+        // @ts-ignore
+        setUri(recording.getURI());
         setRecording(recording);
+        setRecordingTime(0); // Reinicia el contador
+
+        // Inicia el cronómetro
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        // @ts-ignore
+        intervalRef.current = setInterval(() => {
+          // @ts-ignore
+          setRecordingTime((prevTime) => prevTime + 1);
+        }, 1000);
       }
     } catch (err) {
       console.error('Error al iniciar grabación:', err);
@@ -112,28 +131,61 @@ const CreateOrEditIdea = ({
   async function stopRecording() {
     if (!recording) return;
 
+    clearInterval(intervalRef.current!); // Detiene el cronómetro
     setRecording(null);
 
     await recording.stopAndUnloadAsync();
-    const { sound, status } = await recording.createNewLoadedSoundAsync();
-
-    // Asegura que el sonido se reproduzca con el volumen máximo
-    await sound.setVolumeAsync(1.0);
+    const { sound } = await recording.createNewLoadedSoundAsync();
+    await sound.setVolumeAsync(1.0); // Asegura volumen máximo
 
     setAudio(sound);
-    setAudioDuration(getDurationFormatted(status.durationMillis));
+  }
+
+  function getDurationFormatted(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  }
+
+  async function playAudioFromUrl(url: string) {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: url },
+        { shouldPlay: true }
+      );
+      setAudio(sound);
+
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded && status.didJustFinish) {
+          setAudio(null); // Libera el audio cuando termine
+        }
+      });
+    } catch (err) {
+      console.error("Error al reproducir audio:", err);
+    }
+  }
+
+  const handleSave = async () => {
+    if (uri) {
+      const fileUrl = await uploadAudio(uri);
+      addIdea({
+        id: 2,
+        title,
+        description,
+        mediaURL: fileUrl ?? "",
+        reference,
+        date: ""
+      })
+    }
   }
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
-        <View style={{ height: 50, width: '100%' }}>
-          <GradientComponent height={150} />
-        </View>
         <View style={styles.container}>
           {/* Encabezado */}
           <View style={styles.header}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => { handleMenu("list"); handleEntity(null) }}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Idea Nueva</Text>
@@ -180,24 +232,41 @@ const CreateOrEditIdea = ({
             Graba audio sobre tu idea musical
           </Text>
           <View style={styles.audioRecorder}>
-            <TouchableOpacity
-              style={recording ? styles.micButtonActive : styles.micButton}
-              onPress={recording ? stopRecording : startRecording}>
-              <Ionicons name="mic" size={24} color="white" />
-            </TouchableOpacity>
-            <View style={styles.audioLine} />
-            <Text style={styles.audioTime}>{audioDuration}</Text>
+            {audio || entity?.mediaURL ? (
+              <>
+                <TouchableOpacity
+                  style={styles.micButton}
+                  onPress={() => {
+                    if (entity?.mediaURL) return playAudioFromUrl(entity.mediaURL)
+                    // @ts-ignore
+                    return audio.replayAsync()
+                  }}>
+                  <Ionicons name="play" size={24} color="white" />
+                </TouchableOpacity>
+                <View style={styles.audioLine} />
+                <Text style={styles.audioTime}>
+                  {getDurationFormatted(recordingTime)}
+                </Text>
+                <TouchableOpacity
+                  style={styles.playButton}
+                  onPress={() => { setAudio(null); setRecordingTime(0) }}>
+                  <Ionicons name="trash" size={24} color="white" />
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={recording ? styles.micButtonActive : styles.micButton}
+                  onPress={recording ? stopRecording : startRecording}>
+                  <Ionicons name="mic" size={24} color="white" />
+                </TouchableOpacity>
+                <View style={styles.audioLine} />
+                <Text style={styles.audioTime}>
+                  {getDurationFormatted(recordingTime)}
+                </Text>
+              </>
+            )}
           </View>
-
-          {/* Botón de reproducción */}
-          {audio && (
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={() => audio.replayAsync()}>
-              <Ionicons name="play" size={20} color="white" />
-              <Text style={styles.playButtonText}>Reproducir</Text>
-            </TouchableOpacity>
-          )}
 
           {/* Referencia */}
           <Text style={styles.referenceLabel}>
@@ -213,7 +282,7 @@ const CreateOrEditIdea = ({
 
           {/* Botones */}
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.saveButton}>
+            <TouchableOpacity style={styles.saveButton} onPress={() => handleSave()}>
               <Text style={styles.saveButtonText}>Guardar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancelButton}>
@@ -224,7 +293,7 @@ const CreateOrEditIdea = ({
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -239,7 +308,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+    paddingHorizontal: 20,
   },
   header: {
     flexDirection: 'row',
@@ -395,10 +464,11 @@ const styles = StyleSheet.create({
   playButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    // marginTop: 10,
     backgroundColor: '#333',
     padding: 10,
     borderRadius: 5,
+    marginLeft: 5
   },
   playButtonText: {
     color: 'white',

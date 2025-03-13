@@ -19,7 +19,7 @@ const USERS = [
       { name: 'Tiktok', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
   {
     name: 'Mariana López',
@@ -39,7 +39,7 @@ const USERS = [
       { name: 'Bandcamp', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
   {
     isFollowing: false,
@@ -59,7 +59,7 @@ const USERS = [
       { name: 'SoundCloud', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
   {
     isFollowing: false,
@@ -78,7 +78,7 @@ const USERS = [
       { name: 'SoundCloud', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
   {
     isFollowing: false,
@@ -98,7 +98,7 @@ const USERS = [
       { name: 'YouTube', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
   {
     isFollowing: false,
@@ -117,8 +117,71 @@ const USERS = [
       { name: 'YouTube', url: '' },
     ],
     posts: [],
-    clips:[]
+    clips: []
   },
+  {
+    videoURL: 'https://storage.googleapis.com/roomies-2096e.appspot.com/6273835-uhd_2160_3840_30fps.mp4',
+    imageURL: 'https://randomuser.me/api/portraits/men/2.jpg',
+    username: 'robert0',
+    name: "Robert",
+    content: "Lorem ipsut",
+    tags: ["Tango", "Guitarra"],
+    comments: [],
+    isFollowing: false,
+    id: 40,
+    bio: 'Violinista clásica y exploradora del folk. Enseñando música a tiempo completo y tocando en una orquesta.',
+    location: 'Santiago, Chile',
+    followers: 875,
+    following: 300,
+    links: [
+      { name: 'Instagram', url: '' },
+      { name: 'Facebook', url: '' },
+      { name: 'YouTube', url: '' },
+    ],
+    posts: [],
+    clips: []
+  },
+  {
+    imageURL: 'https://randomuser.me/api/portraits/woman/2.jpg',
+    username: 'mariana_lopez',
+    name: "Mari Lopez",
+    content: "Lorem ipsut",
+    tags: ["Rock", "Cantante"],
+    comments: [],
+    isFollowing: false,
+    id: 41,
+    bio: 'Violinista clásica y exploradora del folk. Enseñando música a tiempo completo y tocando en una orquesta.',
+    location: 'Santiago, Chile',
+    followers: 875,
+    following: 300,
+    links: [
+      { name: 'Instagram', url: '' },
+      { name: 'Facebook', url: '' },
+      { name: 'YouTube', url: '' },
+    ],
+    posts: [],
+    clips: []
+  },
+  {
+    imageURL: 'https://randomuser.me/api/portraits/men/2.jpg',
+    username: 'carlosmendoza',
+    name: "Carlos",
+    content: "Lorem ipsut",
+    tags: ["#Clip", "#Guitarra"],
+    isFollowing: false,
+    id: 42,
+    bio: 'Violinista clásica y exploradora del folk. Enseñando música a tiempo completo y tocando en una orquesta.',
+    location: 'Santiago, Chile',
+    followers: 875,
+    following: 300,
+    links: [
+      { name: 'Instagram', url: '' },
+      { name: 'Facebook', url: '' },
+      { name: 'YouTube', url: '' },
+    ],
+    posts: [],
+    clips: []
+  }
 ];
 
 export default USERS;

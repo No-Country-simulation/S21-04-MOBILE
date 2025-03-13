@@ -1,11 +1,12 @@
 import { create } from 'zustand';
-import { clipsFeatured } from '../hardcode/clips';
+import { clipsFeatured, clipsFollowing, clipsRock } from '../hardcode/clips';
 import { IDEAS } from "../hardcode/ideas";
 import Clip from '../interfaces/clip-interface';
 import Post from '../interfaces/post-interface';
 import Profile from '../interfaces/profille-interface';
 import Idea from '../interfaces/idea-interface';
 import { PROFILE } from '../hardcode/profile';
+import { POSTS } from '../hardcode/posts';
 
 export interface GlobalStore {
     // usuario logueado
@@ -56,7 +57,7 @@ export interface GlobalStore {
 
 export const useStore = create((set) => ({
     profile: PROFILE,
-    following: [],
+    following: [40, 41, 42],
     // agregar usuario siguiendo
     addFollowing: (id: string) =>
         set((state: GlobalStore) => ({
@@ -96,8 +97,12 @@ export const useStore = create((set) => ({
             ideas: [...state.ideas, idea]
         })),
 
-
     clipsFeatured: clipsFeatured,
+    clipsFollowing: clipsFollowing,
+    clipsRock: clipsRock,
+
+    postsFeatured: POSTS,
+    postsFollowing: POSTS.reverse(),
 
     addCommentToClip: (clipId: string, comment: { username: string, text: string, avatar: string }) =>
         set((state: GlobalStore) => ({

@@ -1,7 +1,9 @@
 export default interface Idea {
-    title: string
-    description: string
-    audio?: any
-    reference: string
-    mediaURL?: string
-  }
+  id: number
+  title: string
+  description: string
+  audio?: any
+  date: string
+  reference: string
+  mediaURL?: string
+}

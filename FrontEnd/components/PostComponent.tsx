@@ -1,22 +1,13 @@
-import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import COMMENTS from '../hardcode/comments';
-import PROFILE from '../hardcode/profile';
+import { PROFILE } from '../hardcode/profile';
+import Post from '../interfaces/post-interface';
 import { GlobalStore, useStore } from '../store';
 import CommentsModal from './CommentModal';
-
-interface PostProps {
-  id: number;
-  userId?: number;
-  name: string;
-  time: string;
-  imageURL: string;
-  content: string;
-  hashtags: string[];
-}
+import VideoComponent from './VideoComponent';
 
 const PostComponent = ({
   id,
@@ -26,7 +17,8 @@ const PostComponent = ({
   imageURL,
   content,
   hashtags,
-}: PostProps) => {
+  mediaUrl
+}: Post) => {
   const { following, addFollowing, likedPosts, toggleLikePost } = useStore(s => s as GlobalStore);
   const isLiked = likedPosts.includes(String(id));
   const [modalVisible, setModalVisible] = useState(false);
@@ -45,6 +37,7 @@ const PostComponent = ({
   return (
     <>
       <CommentsModal
+        id={id}
         visible={modalVisible}
         onDismiss={() => setModalVisible(false)}
         comments={COMMENTS}
@@ -83,8 +76,14 @@ const PostComponent = ({
 
         <Text style={styles.postText}>
           {content} <Text style={styles.mention}>@usuario</Text>{' '}
-          <Text style={styles.hashtag}>{JSON.stringify(hashtags)}</Text>
+          <Text style={styles.hashtag}>{hashtags.join(" ")}</Text>
         </Text>
+
+        {mediaUrl && (
+          <View style={{ height: 150, width: "100%" }}>
+            <VideoComponent videoSource={mediaUrl} />
+          </View>
+        )}
 
         {/* @ts-ignore */}
         <View style={styles.footer}>

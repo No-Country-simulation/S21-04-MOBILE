@@ -1,21 +1,15 @@
-import { Provider } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Modal, Portal } from 'react-native-paper';
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
   Image,
-  StyleSheet,
-  TextInput,
-  ScrollView,
+  StyleSheet, Text, TextInput, TouchableOpacity, View
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
-import TagSelectionModal from '../components/ModalTagComponent';
-import ModalSuccess from '../components/ModalSuccess';
+import { Provider } from 'react-native-paper';
 import ModalCancel from '../components/ModalCancell';
+import ModalSuccess from '../components/ModalSuccess';
+import TagSelectionModal from '../components/ModalTagComponent';
 import { uploadFile } from '../services/media';
 import { createPostServices } from '../services/posts';
 
@@ -183,7 +177,7 @@ const NewPostScreen = () => {
     if (newPost?.mediaURL?.uri) {
       const fileUrl = await uploadFile(newPost.mediaURL.uri); // Subir archivo a Firebase
       console.log({ fileUrl });
-      if(fileUrl) {
+      if (fileUrl) {
         const response = await createPostServices({
           type: "sample",
           mediaURL: fileUrl,
@@ -215,7 +209,14 @@ const NewPostScreen = () => {
         visible={modalCancell}
         newPost={newPost}
         setNewPost={setNewPost}
-        onClose={() => setModalCancell(false)}
+        onClose={() => {
+          setModalCancell(false); setNewPost({
+            mediaURL: null,
+            location: '',
+            content: '',
+            tags: [],
+          })
+        }}
       />
       <ModalSuccess
         visible={modalConfirm}

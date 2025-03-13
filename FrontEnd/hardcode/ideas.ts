@@ -1,10 +1,11 @@
 export const IDEAS = [
     {
+        id: 1,
+        date: "",
         title: "Intro Electronica Folklorica",
         description: "Esta es una descripción",
-        audio: null,
         reference: "Referencia 1",
-        mediaURL: "https://storage.googleapis.com/roomies-2096e.appspot.com/idea.mp3",
-        duration: 100
+        mediaURL: "https://storage.googleapis.com/nc-s21-04/second-hand-149907.mp3",
+        duration: 7
     }
 ]
