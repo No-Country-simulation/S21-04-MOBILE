@@ -116,7 +116,43 @@ const USERS = [
       { name: 'Facebook', url: '' },
       { name: 'YouTube', url: '' },
     ],
-    posts: [],
+    posts: [
+      {
+        id: 1,
+        userId: 4,
+        name: 'Paula Prieto',
+        time: 'Hace 2hr.',
+        imageURL: 'user',
+        content:
+          '¡Con mucha alegría les compartimos este videoclip!✨ Un trabajo hecho con pasión, música y muchas ganas. 🎶🎥 ¡Esperamos que lo disfruten tanto como nosotros al hacerlo! 💛',
+        hashtags: ['Cantautor'],
+        mediaURL: "https://storage.googleapis.com/nc-s21-04/Video%20publicacion%20Paula%20Prieto.mp4"
+      },
+      {
+        id: 2,
+        userId: 6,
+        name: 'Paula Prieto',
+        time: 'Hace 3hr.',
+        imageURL: 'https://randomuser.me/api/portraits/men/1.jpg',
+        content:
+          'Explorando nuevos sonidos y estilos musicales. ¿Qué opinan de esta mezcla de jazz y electrónica?',
+        hashtags: ['Jazz', "Electronica"],
+        mediaUrl: "https://storage.googleapis.com/nc-s21-04/Video%20Corto%20Pablo%20Cuello%203.mp4",
+        comments: []
+      },
+      {
+        id: 3,
+        userId: 8,
+        name: 'Paula Prieto',
+        time: 'Hace 1hr.',
+        imageURL: 'https://randomuser.me/api/portraits/women/1.jpg',
+        content:
+          'Probando nuevas sonidos',
+        hashtags: ['Jazz', 'Electrónica'],
+        mediaUrl: "https://storage.googleapis.com/nc-s21-04/Video%20Corto%20Pablo%20Cuello%202.mp4", 
+        comments: []
+      },
+    ],
     clips: []
   },
   {
