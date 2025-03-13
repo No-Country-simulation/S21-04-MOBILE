@@ -53,7 +53,7 @@ const PostComponent = ({
                   ? require('../assets/user.png')
                   : imageURL === 'user2'
                     ? require('../assets/user-2.jpg')
-                    : PROFILE.imageURL
+                    : { uri: imageURL }
               }
               style={styles.profileImage}
             />
@@ -80,7 +80,7 @@ const PostComponent = ({
         </Text>
 
         {mediaUrl && (
-          <View style={{ height: 150, width: "100%" }}>
+          <View style={{ height: 150, width: "100%", marginBottom: 10 }}>
             <VideoComponent videoSource={mediaUrl} />
           </View>
         )}

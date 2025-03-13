@@ -7,8 +7,8 @@ export const POSTS = [
         imageURL: 'user',
         content:
             '¡Con mucha alegría les compartimos este videoclip!✨ Un trabajo hecho con pasión, música y muchas ganas. 🎶🎥 ¡Esperamos que lo disfruten tanto como nosotros al hacerlo! 💛',
-        hashtags: ['Cantautor'],
-        mediaURL: "https://storage.googleapis.com/nc-s21-04/Video%20publicacion%20Paula%20Prieto.mp4"
+        hashtags: ['#Cantautor'],
+        mediaUrl: "https://storage.googleapis.com/nc-s21-04/video%20corto%202%20%40paulapi.mp4"
     },
     {
         id: 2,
@@ -18,7 +18,7 @@ export const POSTS = [
         imageURL: 'https://randomuser.me/api/portraits/men/1.jpg',
         content:
             'Explorando nuevos sonidos y estilos musicales. ¿Qué opinan de esta mezcla de jazz y electrónica?',
-        hashtags: ['Jazz', "Electronica"],
+        hashtags: ['#Jazz', "#Electronica"],
         mediaUrl: "https://storage.googleapis.com/nc-s21-04/Video%20Corto%20Pablo%20Cuello%203.mp4"
     },
     {
@@ -29,7 +29,7 @@ export const POSTS = [
         imageURL: 'https://randomuser.me/api/portraits/women/1.jpg',
         content:
             'Probando nuevas sonidos',
-        hashtags: ['Jazz', 'Electrónica'],
+        hashtags: ['#Jazz', '#Electrónica'],
         mediaUrl: "https://storage.googleapis.com/nc-s21-04/Video%20Corto%20Pablo%20Cuello%202.mp4"
     },
     {
@@ -37,21 +37,21 @@ export const POSTS = [
         userId: 9,
         name: 'Martín Álvarez',
         time: 'Hace 30min.',
-        imageURL: 'user4',
+        imageURL: 'https://randomuser.me/api/portraits/men/6.jpg',
         content:
             'El ensayo de hoy estuvo increíble. No puedo esperar para que escuchen nuestro nuevo single.',
-        hashtags: ['Rock', 'Indie'],
+        hashtags: ['#Rock', '#Indie'],
         mediaUrl: "https://storage.googleapis.com/nc-s21-04/Video%20corto%20Pablo%20Cuello%204.mp4"
     },
     {
         id: 5,
         userId: 10,
         name: 'Sofía Ríos',
-        time: 'Hace 5hr.',
-        imageURL: 'user5',
+        time: 'Hace 5hr.',        
+        imageURL: 'https://randomuser.me/api/portraits/women/5.jpg',
         content:
             'Nada como componer de madrugada con la guitarra en mano. La inspiración no tiene horario.',
-        hashtags: ['Acústico', 'Cantautor'],
+        hashtags: ['#Acústico', '#Cantautor'],
         mediaUrl: "https://storage.googleapis.com/nc-s21-04/SampleVideo3.mp4"
     },
     {
@@ -59,10 +59,10 @@ export const POSTS = [
         userId: 11,
         name: 'Javier Luján',
         time: 'Ayer',
-        imageURL: 'user6',
+        imageURL: 'https://randomuser.me/api/portraits/men/10.jpg',
         content:
             'Lanzamos nuestro EP debut y estamos muy emocionados. ¡Escúchenlo y dígannos qué les parece!',
-        hashtags: ['Lanzamiento', 'Música'],
+        hashtags: ['#Lanzamiento', '#Música'],
         mediaUrl: "https://storage.googleapis.com/nc-s21-04/SampleVideo4.mp4"
     }
 ];

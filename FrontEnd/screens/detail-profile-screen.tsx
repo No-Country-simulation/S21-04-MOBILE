@@ -23,7 +23,7 @@ export default function DetailProfileScreen({ route }: { route: any }) {
   const { userId } = route.params;
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
-  const [followers, setFollowers] = useState(currentUser.followers);
+  const [followers, setFollowers] = useState(currentUser?.followers);
 
   const isFollowing = following.includes(String(userId));
 
@@ -33,6 +33,7 @@ export default function DetailProfileScreen({ route }: { route: any }) {
     const user = USERS.filter((x) => x.id === userId)[0];
     if (user?.id) {
       setCurrentUser(user);
+      setFollowers(user.followers)
     }
   }, [userId]);
 

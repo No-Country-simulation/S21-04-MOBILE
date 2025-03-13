@@ -9,7 +9,7 @@ import ImagePickerComponent from '../components/ImagePickerComponent';
 import MenuComponent from '../components/MenuComponent';
 import ModalComponent from '../components/ModalComponent';
 import TagComponent from '../components/TagComponent';
-import PROFILE from '../hardcode/profile';
+import { PROFILE } from '../hardcode/profile';
 import Clip from '../interfaces/clip-interface';
 import { useNavigation } from '@react-navigation/native';
 

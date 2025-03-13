@@ -19,22 +19,17 @@ import Clip from '../interfaces/clip-interface';
 import Post from '../interfaces/post-interface';
 import { GlobalStore, useStore } from '../store';
 
-enum Menu {
-  "tendencias",
-  "seguidos"
-}
-
 interface MenuProps {
-  menu: Menu,
-  handleMenu: (s: Menu) => void,
+  menu: "tendencias" | "seguidos",
+  handleMenu: (s: "tendencias" | "seguidos") => void,
   handleSelectClip: (s: Clip) => void
 }
 
 export default function HomeScreen() {
-  const [menu, setMenu] = React.useState<Menu>(Menu["tendencias"]);
+  const [menu, setMenu] = React.useState<"tendencias" | "seguidos">("tendencias");
   const [selectedClip, setSelectedClip] = React.useState<Clip | null>();
 
-  const handleMenu = (s: Menu) => setMenu(s);
+  const handleMenu = (s: "tendencias" | "seguidos") => setMenu(s);
   const handleSelectClip = (c: Clip | null) => setSelectedClip(c);
 
   return (
@@ -55,7 +50,7 @@ export default function HomeScreen() {
         </ScrollView>
       </SafeAreaView>
     </Provider>
-  );
+  )
 }
 
 // Logo
@@ -91,42 +86,44 @@ const Clips = ({
 );
 
 // Section Publicaciones in Tab Tendencias
-const Publicaciones = ({ posts }: { posts: Post[] }) => (
-  <View style={{ marginVertical: 15 }}>
-    <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
-      Últimas Publicaciones
-    </Text>
-    <FlatList
-      data={posts}
-      renderItem={({ item }: { item: Post }) => <PostComponent {...item} />}
-      keyExtractor={(_: Post, index: number) => String(index)}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
-    />
-  </View>
-);
+const Publicaciones = ({ posts }: { posts: Post[] }) => {
+  React.useEffect(() => { }, [posts])
+  return (
+    <View style={{ marginVertical: 15 }}>
+      <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
+        Últimas Publicaciones
+      </Text>
+      <FlatList
+        data={posts}
+        renderItem={({ item }: { item: Post }) => <PostComponent {...item} />}
+        keyExtractor={(_: Post, index: number) => String(index)}
+        showsHorizontalScrollIndicator={false}
+      />
+    </View>
+  )
+};
 
 // Tab Home (Tendencia, Seguidos)
-const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void }) => (
+const Tabs = ({ menu, handleMenu }: { menu: "tendencias" | "seguidos", handleMenu: (s: "tendencias" | "seguidos") => void }) => (
   <View style={styles.tabs}>
     <TouchableOpacity
-      onPress={() => handleMenu(Menu['tendencias'])}
-      style={[styles.tab, menu === Menu['tendencias'] && styles.selected]}>
+      onPress={() => handleMenu('tendencias')}
+      style={[styles.tab, menu === 'tendencias' && styles.selected]}>
       <Text
         style={[
           styles.textTab,
-          menu === Menu['tendencias'] && styles.textSelected,
+          menu === 'tendencias' && styles.textSelected,
         ]}>
         Tendencias
       </Text>
     </TouchableOpacity>
     <TouchableOpacity
-      onPress={() => handleMenu(Menu['seguidos'])}
-      style={[styles.tab, menu === Menu['seguidos'] && styles.selected]}>
+      onPress={() => handleMenu('seguidos')}
+      style={[styles.tab, menu === 'seguidos' && styles.selected]}>
       <Text
         style={[
           styles.textTab,
-          menu === Menu['seguidos'] && styles.textSelected,
+          menu === 'seguidos' && styles.textSelected,
         ]}>
         Siguiendo
       </Text>
@@ -135,20 +132,43 @@ const Tabs = ({ menu, handleMenu }: { menu: Menu, handleMenu: (s: Menu) => void 
 );
 
 // Menu component see 
-const MenuComponent = ({ menu, handleSelectClip }: { menu: Menu, handleSelectClip: (s: Clip) => void }) => {
+const MenuComponent = ({ menu, handleSelectClip }: { menu: "tendencias" | "seguidos", handleSelectClip: (s: Clip) => void }) => {
   // @ts-ignore
   const { clipsFeatured, clipsFollowing, postsFollowing, postsFeatured } = useStore((state: GlobalStore) => state);
-  if (menu === Menu["seguidos"]) return (
+
+  React.useEffect(() => { }, [menu])
+
+  if (menu === "seguidos") return (
     <>
       <Clips clips={clipsFollowing} onSelectClip={handleSelectClip} />
-      <Publicaciones posts={postsFollowing} />
+      <View style={{ marginVertical: 15 }}>
+        <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
+          Últimas Publicaciones
+        </Text>
+        <FlatList
+          data={postsFollowing}
+          renderItem={({ item }: { item: Post }) => <PostComponent {...item} />}
+          keyExtractor={(_: Post, index: number) => String(index)}
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
     </>
   )
 
   return (
     <>
       <Clips clips={clipsFeatured} onSelectClip={handleSelectClip} />
-      <Publicaciones posts={postsFeatured} />
+      <View style={{ marginVertical: 15 }}>
+        <Text style={{ fontSize: 18, fontWeight: '700', color: 'white', marginBottom: 10 }}>
+          Últimas Publicaciones
+        </Text>
+        <FlatList
+          data={postsFeatured}
+          renderItem={({ item }: { item: Post }) => <PostComponent {...item} />}
+          keyExtractor={(_: Post, index: number) => String(index)}
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
     </>
   )
 }

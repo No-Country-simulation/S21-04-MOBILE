@@ -126,14 +126,14 @@ const USERS = [
         content:
           '¡Con mucha alegría les compartimos este videoclip!✨ Un trabajo hecho con pasión, música y muchas ganas. 🎶🎥 ¡Esperamos que lo disfruten tanto como nosotros al hacerlo! 💛',
         hashtags: ['Cantautor'],
-        mediaURL: "https://storage.googleapis.com/nc-s21-04/Video%20publicacion%20Paula%20Prieto.mp4"
+        mediaURL: "https://storage.googleapis.com/nc-s21-04/video%20corto%202%20%40paulapi.mp4"
       },
       {
         id: 2,
-        userId: 6,
+        userId: 4,
         name: 'Paula Prieto',
         time: 'Hace 3hr.',
-        imageURL: 'https://randomuser.me/api/portraits/men/1.jpg',
+        imageURL: 'user',
         content:
           'Explorando nuevos sonidos y estilos musicales. ¿Qué opinan de esta mezcla de jazz y electrónica?',
         hashtags: ['Jazz', "Electronica"],
@@ -142,10 +142,10 @@ const USERS = [
       },
       {
         id: 3,
-        userId: 8,
+        userId: 4,
         name: 'Paula Prieto',
         time: 'Hace 1hr.',
-        imageURL: 'https://randomuser.me/api/portraits/women/1.jpg',
+        imageURL: 'user',
         content:
           'Probando nuevas sonidos',
         hashtags: ['Jazz', 'Electrónica'],

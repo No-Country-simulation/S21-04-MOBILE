@@ -102,7 +102,7 @@ export const useStore = create((set) => ({
     clipsRock: clipsRock,
 
     postsFeatured: POSTS,
-    postsFollowing: POSTS.reverse(),
+    // postsFollowing: POSTS.reverse(),
 
     addCommentToClip: (clipId: string, comment: { username: string, text: string, avatar: string }) =>
         set((state: GlobalStore) => ({
